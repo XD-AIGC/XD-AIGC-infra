@@ -1,0 +1,4318 @@
+{
+  "naming_convention": {
+    "description": "基于伊瑟 UE 项目的角色资产命名约定。路径形如 ArtResources/Characters/<TYPE>/<ROLE_DIR>/(<VARIANT_DIR>/)?SK_<...>_LOD0/v<n>_<view>.png",
+    "type_words": [
+      "Agt",
+      "Cst",
+      "Chr",
+      "Prop",
+      "Thrown"
+    ],
+    "chr_merge_prefixes": [
+      "Chr_Boy_Home",
+      "Chr_Girl_Home",
+      "Chr_Friday"
+    ],
+    "cst_awakening_styles": {
+      "Const": "觉构",
+      "Disor": "觉错",
+      "Hollow": "觉空",
+      "Light": "觉光",
+      "Odd": "觉异"
+    },
+    "types": {
+      "Agt": {
+        "pattern": "Agt/Agt_<Name>/SK_..._LOD0",
+        "role_id_rule": "Agt_<Name>",
+        "variant_rule": "无 — 1 角色 = 1 mesh",
+        "example": "Agt/Agt_Alicorn/SK_Agt_Alicorn_LOD0 → 角色 Agt_Alicorn"
+      },
+      "Cst": {
+        "pattern": "Cst/Cst_<Char>/Cst_<Char>_<Style>(_<idx>)?/SK_..._LOD0",
+        "role_id_rule": "Cst_<Char>",
+        "variant_rule": "套装关键词 = Const/Disor/Hollow/Light/Odd（觉醒五系）；_1 _2 后缀 = 同套装的造型/颜色变体",
+        "example": "Cst/Cst_Cabala/Cst_Cabala_Hollow/SK_Cst_Cabala_Hollow_LOD0 → 角色 Cst_Cabala / 变体 Hollow（觉空）"
+      },
+      "Chr": {
+        "pattern": "多种 sub-pattern，见 sub_patterns",
+        "role_id_rule": "若 char_dir 以 Chr_Boy_Home / Chr_Girl_Home / Chr_Friday 开头 → 合并到该 prefix；否则 = char_dir",
+        "sub_patterns": {
+          "single_npc": {
+            "pattern": "Chr/Chr_<Name>/SK_..._LOD0",
+            "example": "Chr/Chr_AgentM/SK_Chr_AgentM_LOD0 → 角色 Chr_AgentM"
+          },
+          "player_outfit": {
+            "pattern": "Chr/Chr_Boy_Home_<Theme>/<Theme>_<Color>/SK_..._LOD0",
+            "role_id_rule": "Chr_Boy_Home / Chr_Girl_Home（玩家男/女主固定基底）",
+            "variant_rule": "_<Theme>（Crown/Dragon/Summer/Eveningdress/SpringFestival/Sw_*）+ _<Color>（Blackgold/Whitepurple/Greenpink…）",
+            "example": "Chr/Chr_Boy_Home_Eveningdress/Eveningdress_Blackgold/SK_Chr_Boy_Home_Ed_Blackgold_LOD0 → 角色 Chr_Boy_Home / 变体 Ed_Blackgold（晚礼服·黑金）"
+          },
+          "friday_series": {
+            "pattern": "Chr/Chr_Friday_<Series>/<Series>_<Variant>/SK_Agt_Friday_..._LOD0",
+            "role_id_rule": "Chr_Friday（基底）",
+            "variant_rule": "_<Series>（Demon/Heromask/Fantasy/Interstate5/Thorn/GoldenSpring）+ _<Variant>",
+            "warning": "mesh 文件名前缀是 SK_Agt_Friday_*（不是 Chr）— 项目历史遗留命名不一致",
+            "example": "Chr/Chr_Friday_Heromask/Heromask_Hero/SK_Agt_Friday_Heromask_Hero_LOD0 → 角色 Chr_Friday / 变体 Heromask_Hero"
+          }
+        }
+      },
+      "Prop": {
+        "pattern": "Prop/Prop_<Name>/SK_..._LOD0",
+        "role_id_rule": "Prop_<Name>",
+        "variant_rule": "一般无变体",
+        "example": "Prop/Prop_Bottle01/SK_Prop_Bottle01"
+      },
+      "Thrown": {
+        "pattern": "Thrown/<...>",
+        "role_id_rule": "按第二段目录原样分组"
+      }
+    },
+    "fields": {
+      "rel_path": "相对扫描根目录的路径（到 mesh 所在目录）",
+      "mesh_name": "SK_..._LOD0 文件夹名（去 .重复后缀）",
+      "role_id": "角色 ID，同 role_id 的多个 variant 视为「同角色不同套装/颜色」",
+      "variant.name": "套装/颜色标签，已去除角色 ID 前缀；重名时追加 [mesh_name] 后缀去重"
+    }
+  },
+  "stats": {
+    "total_roles": 241,
+    "total_meshes": 508,
+    "multi_variant_roles": 118,
+    "max_variants": 50,
+    "max_variants_role": "Chr_Friday",
+    "roles_by_type": {
+      "Agt": 57,
+      "Chr": 6,
+      "Cst": 178
+    }
+  },
+  "roles": [
+    {
+      "role_id": "Agt_Alicorn",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Alicorn/Agt_Alicorn_1/SK_Agt_Alicorn_1_LOD0.SK_Agt_Alicorn_1_LOD0",
+          "mesh_name": "SK_Agt_Alicorn_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Alicorn/SK_Agt_Alicorn_LOD0.SK_Agt_Alicorn_LOD0",
+          "mesh_name": "SK_Agt_Alicorn_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Amber",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Amber/Agt_Amber_1/SK_Agt_Amber_1_LOD0.SK_Agt_Amber_1_LOD0",
+          "mesh_name": "SK_Agt_Amber_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Amber/SK_Agt_Amber_LOD0.SK_Agt_Amber_LOD0",
+          "mesh_name": "SK_Agt_Amber_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Beetle",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Beetle/SK_Agt_Beetle_LOD0.SK_Agt_Beetle_LOD0",
+          "mesh_name": "SK_Agt_Beetle_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_BlackFlag",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_BlackFlag/SK_Agt_BlackFlag_LOD0.SK_Agt_BlackFlag_LOD0",
+          "mesh_name": "SK_Agt_BlackFlag_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_BlackMoon",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_BlackMoon/Agt_BlackMoon_1/SK_Agt_BlackMoon_1_LOD0.SK_Agt_BlackMoon_1_LOD0",
+          "mesh_name": "SK_Agt_BlackMoon_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_BlackMoon/SK_Agt_BlackMoon_LOD0.SK_Agt_BlackMoon_LOD0",
+          "mesh_name": "SK_Agt_BlackMoon_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Bunny",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Bunny/SK_Agt_Bunny.SK_Agt_Bunny",
+          "mesh_name": "SK_Agt_Bunny"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ChameleonSniper",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ChameleonSniper/SK_Agt_ChameleonSniper_LOD0.SK_Agt_ChameleonSniper_LOD0",
+          "mesh_name": "SK_Agt_ChameleonSniper_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ChampCroc",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ChampCroc/Agt_ChampCroc_1/SK_Agt_ChampCroc_1_LOD0.SK_Agt_ChampCroc_1_LOD0",
+          "mesh_name": "SK_Agt_ChampCroc_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ChampCroc/SK_Agt_ChampCroc_LOD0.SK_Agt_ChampCroc_LOD0",
+          "mesh_name": "SK_Agt_ChampCroc_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_CleverCat",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_CleverCat/SK_Agt_CleverCat_LOD0.SK_Agt_CleverCat_LOD0",
+          "mesh_name": "SK_Agt_CleverCat_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_CursedFrog",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_CursedFrog/SK_Agt_CursedFrog_LOD0.SK_Agt_CursedFrog_LOD0",
+          "mesh_name": "SK_Agt_CursedFrog_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_DiamondHeart",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_DiamondHeart/SK_Agt_DiamondHeart_LOD0.SK_Agt_DiamondHeart_LOD0",
+          "mesh_name": "SK_Agt_DiamondHeart_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Doomcrow",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Doomcrow/Agt_Doomcrow_1/SK_Agt_Doomcrow_1_LOD0.SK_Agt_Doomcrow_1_LOD0",
+          "mesh_name": "SK_Agt_Doomcrow_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Doomcrow/SK_Agt_Doomcrow_LOD0.SK_Agt_Doomcrow_LOD0",
+          "mesh_name": "SK_Agt_Doomcrow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Earl",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Earl/Agt_Earl_1/SK_Agt_Earl_1_LOD0.SK_Agt_Earl_1_LOD0",
+          "mesh_name": "SK_Agt_Earl_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Earl/SK_Agt_Earl_LOD0.SK_Agt_Earl_LOD0",
+          "mesh_name": "SK_Agt_Earl_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_EMSquid",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_EMSquid/SK_Agt_EMSquid_LOD0.SK_Agt_EMSquid_LOD0",
+          "mesh_name": "SK_Agt_EMSquid_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_FangsWarrior",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_FangsWarrior/Agt_FangsWarrior_1/SK_Agt_FangsWarrior_1_LOD0.SK_Agt_FangsWarrior_1_LOD0",
+          "mesh_name": "SK_Agt_FangsWarrior_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_FangsWarrior/SK_Agt_FangsWarrior_LOD0.SK_Agt_FangsWarrior_LOD0",
+          "mesh_name": "SK_Agt_FangsWarrior_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_FoxDeity",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_FoxDeity/SK_Agt_FoxDeity_LOD0.SK_Agt_FoxDeity_LOD0",
+          "mesh_name": "SK_Agt_FoxDeity_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Gigabyte",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Gigabyte/Agt_Gigabyte_1/SK_Agt_Gigabyte_1_LOD0.SK_Agt_Gigabyte_1_LOD0",
+          "mesh_name": "SK_Agt_Gigabyte_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Gigabyte/SK_Agt_Gigabyte_LOD0.SK_Agt_Gigabyte_LOD0",
+          "mesh_name": "SK_Agt_Gigabyte_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_GoldenLion",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_GoldenLion/Agt_GoldenLion_1/SK_Agt_GoldenLion_1_LOD0.SK_Agt_GoldenLion_1_LOD0",
+          "mesh_name": "SK_Agt_GoldenLion_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_GoldenLion/SK_Agt_GoldenLion_LOD0.SK_Agt_GoldenLion_LOD0",
+          "mesh_name": "SK_Agt_GoldenLion_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Halloween",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Halloween/Agt_Halloween_1/SK_Agt_Halloween_1_LOD0.SK_Agt_Halloween_1_LOD0",
+          "mesh_name": "SK_Agt_Halloween_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Halloween/SK_Agt_Halloween_LOD0.SK_Agt_Halloween_LOD0",
+          "mesh_name": "SK_Agt_Halloween_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_HuntingSquad",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_HuntingSquad/SK_Agt_HuntingSquad_LOD0.SK_Agt_HuntingSquad_LOD0",
+          "mesh_name": "SK_Agt_HuntingSquad_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_HypnotizedSheep",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_HypnotizedSheep/SK_Agt_HypnotizedSheep_LOD0.SK_Agt_HypnotizedSheep_LOD0",
+          "mesh_name": "SK_Agt_HypnotizedSheep_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_JackalGuard",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_JackalGuard/Agt_JackalGuard_1/SK_Agt_JackalGuard_1_LOD0.SK_Agt_JackalGuard_1_LOD0",
+          "mesh_name": "SK_Agt_JackalGuard_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_JackalGuard/SK_Agt_JackalGuard_LOD0.SK_Agt_JackalGuard_LOD0",
+          "mesh_name": "SK_Agt_JackalGuard_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_KungfuPanda",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_KungfuPanda/SK_Agt_KungfuPanda_LOD0.SK_Agt_KungfuPanda_LOD0",
+          "mesh_name": "SK_Agt_KungfuPanda_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_LanternFish",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_LanternFish/SK_Agt_LanternFish_LOD0.SK_Agt_LanternFish_LOD0",
+          "mesh_name": "SK_Agt_LanternFish_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Lighthouse",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Lighthouse/SK_Agt_Lighthouse_LOD0.SK_Agt_LightHouse_LOD0",
+          "mesh_name": "SK_Agt_Lighthouse_LOD0"
+        },
+        {
+          "name": "LightHouse_1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Lighthouse/Agt_LightHouse_1/SK_Agt_LightHouse_1_LOD0.SK_Agt_LightHouse_1_LOD0",
+          "mesh_name": "SK_Agt_LightHouse_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_MagicBook",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MagicBook/Agt_MagicBook_1/SK_Agt_MagicBook_1_LOD0.SK_Agt_MagicBook_1_LOD0",
+          "mesh_name": "SK_Agt_MagicBook_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MagicBook/SK_Agt_MagicBook_LOD0.SK_Agt_MagicBook_LOD0",
+          "mesh_name": "SK_Agt_MagicBook_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Mermaid",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Mermaid/SK_Agt_Mermaid_LOD0.SK_Agt_Mermaid_LOD0",
+          "mesh_name": "SK_Agt_Mermaid_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_MirrorBee",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MirrorBee/SK_Agt_MirrorBee_LOD0.SK_Agt_MirrorBee_LOD0",
+          "mesh_name": "SK_Agt_MirrorBee_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_MoonBunny",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MoonBunny/Agt_MoonBunny_1/SK_Agt_MoonBunny_1_LOD0.SK_Agt_MoonBunny_1_LOD0",
+          "mesh_name": "SK_Agt_MoonBunny_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MoonBunny/SK_Agt_MoonBunny_LOD0.SK_Agt_MoonBunny_LOD0",
+          "mesh_name": "SK_Agt_MoonBunny_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_MoonLight",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_MoonLight/SK_Agt_MoonLight_LOD0.SK_Agt_MoonLight_LOD0",
+          "mesh_name": "SK_Agt_MoonLight_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Ouroboros",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Ouroboros/Agt_Ouroboros_1/SK_Agt_Ouroboros_1_LOD0.SK_Agt_Ouroboros_1_LOD0",
+          "mesh_name": "SK_Agt_Ouroboros_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Ouroboros/SK_Agt_Ouroboros_LOD0.SK_Agt_Ouroboros_LOD0",
+          "mesh_name": "SK_Agt_Ouroboros_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_OwlScholars",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_OwlScholars/SK_Agt_OwlScholars_LOD0.SK_Agt_OwlScholars_LOD0",
+          "mesh_name": "SK_Agt_OwlScholars_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ProdigyPlayer",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ProdigyPlayer/Agt_ProdigyPlayer_1/SK_Agt_ProdigyPlayer_1_LOD0.SK_Agt_ProdigyPlayer_1_LOD0",
+          "mesh_name": "SK_Agt_ProdigyPlayer_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ProdigyPlayer/SK_Agt_ProdigyPlayer_LOD0.SK_Agt_ProdigyPlayer_LOD0",
+          "mesh_name": "SK_Agt_ProdigyPlayer_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Reaper",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Reaper/Sk_Agt_Reaper_LOD0.Sk_Agt_Reaper_LOD0",
+          "mesh_name": "Sk_Agt_Reaper_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ReaperSteps",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ReaperSteps/Agt_ReaperSteps_1/SK_Agt_ReaperSteps_1_LOD0.SK_Agt_ReaperSteps_1_LOD0",
+          "mesh_name": "SK_Agt_ReaperSteps_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ReaperSteps/SK_Agt_ReaperSteps_LOD0.SK_Agt_ReaperSteps_LOD0",
+          "mesh_name": "SK_Agt_ReaperSteps_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_RedComet",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_RedComet/SK_Agt_RedComet_LOD0.SK_Agt_RedComet_LOD0",
+          "mesh_name": "SK_Agt_RedComet_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_RetributionAngel",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_RetributionAngel/SK_Agt_RetributionAngel_LOD0.SK_Agt_RetributionAngel_LOD0",
+          "mesh_name": "SK_Agt_RetributionAngel_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Revelation",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Revelation/Agt_Revelation_1/SK_Agt_Revelation_1_LOD0.SK_Agt_Revelation_1_LOD0",
+          "mesh_name": "SK_Agt_Revelation_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Revelation/SK_Agt_Revelation_LOD0.SK_Agt_Revelation_LOD0",
+          "mesh_name": "SK_Agt_Revelation_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ScorpionQueen",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ScorpionQueen/SK_Agt_ScorpionQueen_LOD0.SK_Agt_ScorpionQueen_LOD0",
+          "mesh_name": "SK_Agt_ScorpionQueen_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ShanHaiJing",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ShanHaiJing/SK_Agt_ShanHaiJing_LOD0.SK_Agt_ShanHaiJing_LOD0",
+          "mesh_name": "SK_Agt_ShanHaiJing_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_SilenceLaw",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_SilenceLaw/Agt_SilenceLaw_1/SK_Agt_SilenceLaw_1_LOD0.SK_Agt_SilenceLaw_1_LOD0",
+          "mesh_name": "SK_Agt_SilenceLaw_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_SilenceLaw/SK_Agt_SilenceLaw_LOD0.SK_Agt_SilenceLaw_LOD0",
+          "mesh_name": "SK_Agt_SilenceLaw_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_SmartRabbit",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_SmartRabbit/SK_Agt_SmartRabbit_LOD0.SK_Agt_SmartRabbit_LOD0",
+          "mesh_name": "SK_Agt_SmartRabbit_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Smith",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Smith/Agt_Smith_1/SK_Agt_Smith_1_LOD0.SK_Agt_Smith_1_LOD0",
+          "mesh_name": "SK_Agt_Smith_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Smith/SK_Agt_Smith_LOD0.SK_Agt_Smith_LOD0",
+          "mesh_name": "SK_Agt_Smith_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Star",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Star/SK_Agt_Star_LOD0.SK_Agt_Star_LOD0",
+          "mesh_name": "SK_Agt_Star_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Storm",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Storm/SK_Agt_Storm_LOD0.SK_Agt_Storm_LOD0",
+          "mesh_name": "SK_Agt_Storm_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Supernova",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Supernova/Agt_Supernova_1/SK_Agt_Supernova_1_LOD0.SK_Agt_Supernova_1_LOD0",
+          "mesh_name": "SK_Agt_Supernova_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Supernova/SK_Agt_Supernova_LOD0.SK_Agt_Supernova_LOD0",
+          "mesh_name": "SK_Agt_Supernova_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_SwordVII",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_SwordVII/Agt_SwordVII_1/SK_Agt_SwordVII_1_LOD0.SK_Agt_SwordVII_1_LOD0",
+          "mesh_name": "SK_Agt_SwordVII_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_SwordVII/SK_Agt_SwordVII_LOD0.SK_Agt_SwordVII_LOD0",
+          "mesh_name": "SK_Agt_SwordVII_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_TheStrongestVoice",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_TheStrongestVoice/Agt_TheStrongestVoice_1/SK_Agt_TheStrongestVoice_1_LOD0.SK_Agt_TheStrongestVoice_1_LOD0",
+          "mesh_name": "SK_Agt_TheStrongestVoice_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_TheStrongestVoice/SK_Agt_TheStrongestVoice_LOD0.SK_Agt_TheStrongestVoice_LOD0",
+          "mesh_name": "SK_Agt_TheStrongestVoice_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_ThiefCat",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_ThiefCat/SK_Agt_ThiefCat_LOD0.SK_Agt_ThiefCat_LOD0",
+          "mesh_name": "SK_Agt_ThiefCat_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_TigerYin",
+      "type": "Agt",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "1",
+          "rel_path": "ArtResources/Characters/Agt/Agt_TigerYin/Agt_TigerYin_1/SK_Agt_TigerYin_1_LOD0.SK_Agt_TigerYin_1_LOD0",
+          "mesh_name": "SK_Agt_TigerYin_1_LOD0"
+        },
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_TigerYin/SK_Agt_TigerYin_LOD0.SK_Agt_TigerYin_LOD0",
+          "mesh_name": "SK_Agt_TigerYin_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Truth",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Truth/SK_Agt_Truth_LOD0.SK_Agt_Truth_LOD0",
+          "mesh_name": "SK_Agt_Truth_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_Tumbleweed",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_Tumbleweed/SK_Agt_Tumbleweed_LOD0.SK_Agt_Tumbleweed_LOD0",
+          "mesh_name": "SK_Agt_Tumbleweed_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_UnrulyScience",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_UnrulyScience/SK_Agt_UnrulyScience_LOD0.SK_Agt_UnrulyScience_LOD0",
+          "mesh_name": "SK_Agt_UnrulyScience_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_WaspKnight",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_WaspKnight/SK_Agt_WaspKnight_LOD0.SK_Agt_WaspKnight_LOD0",
+          "mesh_name": "SK_Agt_WaspKnight_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_WhiteBlast",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_WhiteBlast/SK_Agt_WhiteBlast_LOD0.SK_Agt_WhiteBlast_LOD0",
+          "mesh_name": "SK_Agt_WhiteBlast_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_WoodPecker",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Woodpecker",
+          "rel_path": "ArtResources/Characters/Agt/Agt_WoodPecker/SK_Agt_Woodpecker_LOD0.SK_Agt_Woodpecker_LOD0",
+          "mesh_name": "SK_Agt_Woodpecker_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Agt_WrongRoad",
+      "type": "Agt",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Agt/Agt_WrongRoad/SK_Agt_WrongRoad_LOD0.SK_Agt_WrongRoad_LOD0",
+          "mesh_name": "SK_Agt_WrongRoad_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_AgentM",
+      "type": "Chr",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Chr/Chr_AgentM/SK_Chr_AgentM_LOD0.SK_Chr_AgentM_LOD0",
+          "mesh_name": "SK_Chr_AgentM_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_Boy_Home",
+      "type": "Chr",
+      "variant_count": 14,
+      "variants": [
+        {
+          "name": "Classic_Qixi",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Classic_Qixi/SK_Chr_Boy_Home_Classic_Qixi_LOD0.SK_Chr_Boy_Home_Classic_Qixi_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Classic_Qixi_LOD0"
+        },
+        {
+          "name": "Classic_WhiteRobe",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Classic_WhiteRobe/Boy_Home_Classic_WhiteRobe/SK_Chr_Boy_Home_Classic_WhiteRobe_LOD0.SK_Chr_Boy_Home_Classic_WhiteRobe_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Classic_WhiteRobe_LOD0"
+        },
+        {
+          "name": "Crown",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Crow/Boy_Home_Crow/SK_Chr_Boy_Home_Crown_LOD0.SK_Chr_Boy_Home_Crown_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Crown_LOD0"
+        },
+        {
+          "name": "Dragon",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Dragon/Boy_Home_Dragon/SK_Chr_Boy_Home_Dragon_LOD0.SK_Chr_Boy_Home_Dragon_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Dragon_LOD0"
+        },
+        {
+          "name": "Ed_Blackgold",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Eveningdress/Eveningdress_Blackgold/SK_Chr_Boy_Home_Ed_Blackgold_LOD0.SK_Chr_Boy_Home_Ed_Blackgold_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Ed_Blackgold_LOD0"
+        },
+        {
+          "name": "Ed_Whitepurple",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Eveningdress/Eveningdress_Whitepurple/SK_Chr_Boy_Home_Ed_Whitepurple_LOD0.SK_Chr_Boy_Home_Ed_Whitepurple_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Ed_Whitepurple_LOD0"
+        },
+        {
+          "name": "Fleet",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Fleet/Boy_Home_Fleet/SK_Chr_Boy_Home_Fleet_LOD0.SK_Chr_Boy_Home_Fleet_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Fleet_LOD0"
+        },
+        {
+          "name": "Pumpkin",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Pumpkin/Boy_Home_Pumpkin/SK_Chr_Boy_Home_Pumpkin_LOD0.SK_Chr_Boy_Home_Pumpkin_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Pumpkin_LOD0"
+        },
+        {
+          "name": "Punk_Navyblack",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Punk_Navyblack/Boy_Home_Punk_Navyblack/SK_Chr_Boy_Home_Punk_Navyblack_LOD0.SK_Chr_Boy_Home_Punk_Navyblack_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Punk_Navyblack_LOD0"
+        },
+        {
+          "name": "Santa",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Santa/Boy_Home_Santa/SK_Chr_Boy_Home_Santa_LOD0.SK_Chr_Boy_Home_Santa_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Santa_LOD0"
+        },
+        {
+          "name": "SpringFestival",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_SpringFestival/Boy_Home_SpringFestival/Boy_Home_SpringFestival_LOD0.Boy_Home_SpringFestival_LOD0",
+          "mesh_name": "Boy_Home_SpringFestival_LOD0"
+        },
+        {
+          "name": "Summer",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Summer/SK_Chr_Boy_Home_Summer_LOD0.SK_Chr_Boy_Home_Summer_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Summer_LOD0"
+        },
+        {
+          "name": "Sw_Greenpink",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Sw_Greenpink/Boy_Home_Sw_Greenpink/SK_Chr_Boy_Home_Sw_Greenpink_LOD0.SK_Chr_Boy_Home_Sw_Greenpink_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Sw_Greenpink_LOD0"
+        },
+        {
+          "name": "Winter",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Boy_Home_Winter/Boy_Home_Winter/SK_Chr_Boy_Home_Winter_LOD0.SK_Chr_Boy_Home_Winter_LOD0",
+          "mesh_name": "SK_Chr_Boy_Home_Winter_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_Female",
+      "type": "Chr",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Girl",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Female/SK_Chr_Girl.SK_Chr_Girl",
+          "mesh_name": "SK_Chr_Girl"
+        },
+        {
+          "name": "Girl_002",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Female/SK_Chr_Girl_002_LOD0.SK_Chr_Girl_002_LOD0",
+          "mesh_name": "SK_Chr_Girl_002_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_Friday",
+      "type": "Chr",
+      "variant_count": 50,
+      "variants": [
+        {
+          "name": "Belldream_CandyCane",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_CandyCane/SK_Agt_Friday_Belldream_CandyCane_LOD0.SK_Agt_Friday_Belldream_CandyCane_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_CandyCane_LOD0"
+        },
+        {
+          "name": "Belldream_Nutcracker",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_Nutcracker/SK_Agt_Friday_Belldream_Nutcracker_LOD0.SK_Agt_Friday_Belldream_Nutcracker_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_Nutcracker_LOD0"
+        },
+        {
+          "name": "Belldream_PastryMaster",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_PastryMaster/SK_Agt_Friday_Belldream_PastryMaster_LOD0.SK_Agt_Friday_Belldream_PastryMaster_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_PastryMaster_LOD0"
+        },
+        {
+          "name": "Belldream_Reindeer",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_Reindeer/SK_Agt_Friday_Belldream_Reindeer_LOD0.SK_Agt_Friday_Belldream_Reindeer_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_Reindeer_LOD0"
+        },
+        {
+          "name": "Belldream_SnowElf",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_SnowElf/SK_Agt_Friday_Belldream_SnowElf_LOD0.SK_Agt_Friday_Belldream_SnowElf_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_SnowElf_LOD0"
+        },
+        {
+          "name": "Belldream_WishingSteward",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Belldream/Belldream_WishingSteward/SK_Agt_Friday_Belldream_WishingSteward_LOD0.SK_Agt_Friday_Belldream_WishingSteward_LOD0",
+          "mesh_name": "SK_Agt_Friday_Belldream_WishingSteward_LOD0"
+        },
+        {
+          "name": "CloudGown_BlueGourd",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_CloudGown/CloudGown_BlueGourd/SK_Agt_Friday_CloudGown_BlueGourd_LOD0.SK_Agt_Friday_CloudGown_BlueGourd_LOD0",
+          "mesh_name": "SK_Agt_Friday_CloudGown_BlueGourd_LOD0"
+        },
+        {
+          "name": "CloudGown_DiceColors",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_CloudGown/CloudGown_DiceColors/SK_Agt_Friday_CloudGown_DiceColors_LOD0.SK_Agt_Friday_CloudGown_DiceColors_LOD0",
+          "mesh_name": "SK_Agt_Friday_CloudGown_DiceColors_LOD0"
+        },
+        {
+          "name": "CloudGown_JoyDrum",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_CloudGown/CloudGown_JoyDrum/SK_Agt_Friday_CloudGown_JoyDrum_LOD0.SK_Agt_Friday_CloudGown_JoyDrum_LOD0",
+          "mesh_name": "SK_Agt_Friday_CloudGown_JoyDrum_LOD0"
+        },
+        {
+          "name": "CloudGown_LuckyCarp",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_CloudGown/CloudGown_LuckyCarp/SK_Agt_Friday_CloudGown_LuckyCarp_LOD0.SK_Agt_Friday_CloudGown_LuckyCarp_LOD0",
+          "mesh_name": "SK_Agt_Friday_CloudGown_LuckyCarp_LOD0"
+        },
+        {
+          "name": "CloudGown_SuperFortune",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_CloudGown/CloudGown_SuperFortune/SK_Agt_Friday_CloudGown_SuperFortune_LOD0.SK_Agt_Friday_CloudGown_SuperFortune_LOD0",
+          "mesh_name": "SK_Agt_Friday_CloudGown_SuperFortune_LOD0"
+        },
+        {
+          "name": "Cruiser_Cowboy",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Cruiser/Cruiser_Cowboy/SK_Agt_Friday_Cruiser_Cowboy_LOD0.SK_Agt_Friday_Cruiser_Cowboy_LOD0",
+          "mesh_name": "SK_Agt_Friday_Cruiser_Cowboy_LOD0"
+        },
+        {
+          "name": "Cruiser_Red",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Cruiser/Cruiser_Red/SK_Agt_Friday_Cruiser_Red_LOD0.SK_Agt_Friday_Cruiser_Red_LOD0",
+          "mesh_name": "SK_Agt_Friday_Cruiser_Red_LOD0"
+        },
+        {
+          "name": "Cute_Explorer",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Cute/Cute_Explorer/SK_Agt_Friday_Cute_Explorer_LOD0.SK_Agt_Friday_Cute_Explorer_LOD0",
+          "mesh_name": "SK_Agt_Friday_Cute_Explorer_LOD0"
+        },
+        {
+          "name": "default [SK_Agt_Friday_LOD0]",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday/SK_Agt_Friday_LOD0.SK_Agt_Friday_LOD0",
+          "mesh_name": "SK_Agt_Friday_LOD0"
+        },
+        {
+          "name": "default [SK_Chr_Friday]",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday/SK_Chr_Friday.SK_Chr_Friday",
+          "mesh_name": "SK_Chr_Friday"
+        },
+        {
+          "name": "Demon_Can",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Demon/Demon_Can/SK_Agt_Friday_Demon_Can_LOD0.SK_Agt_Friday_Demon_Can_LOD0",
+          "mesh_name": "SK_Agt_Friday_Demon_Can_LOD0"
+        },
+        {
+          "name": "Demon_Disguise",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Demon/Demon_Disguise/SK_Agt_Friday_Demon_Disguise_LOD0.SK_Agt_Friday_Demon_Disguise_LOD0",
+          "mesh_name": "SK_Agt_Friday_Demon_Disguise_LOD0"
+        },
+        {
+          "name": "Demon_Reddevil",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Demon/Demon_Reddevil/SK_Agt_Friday_Demon_Reddevil_LOD0.SK_Agt_Friday_Demon_Reddevil_LOD0",
+          "mesh_name": "SK_Agt_Friday_Demon_Reddevil_LOD0"
+        },
+        {
+          "name": "Demon_Undead",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Demon/Demon_Undead/SK_Agt_Friday_Demon_Undead_LOD0.SK_Agt_Friday_Demon_Undead_LOD0",
+          "mesh_name": "SK_Agt_Friday_Demon_Undead_LOD0"
+        },
+        {
+          "name": "Diligent_Cleaning",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Diligent/Diligent_Cleaning/SK_Agt_Friday_Diligent_Cleaning_LOD0.SK_Agt_Friday_Diligent_Cleaning_LOD0",
+          "mesh_name": "SK_Agt_Friday_Diligent_Cleaning_LOD0"
+        },
+        {
+          "name": "Fantasy_BizarreBear",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_BizarreBear/SK_Agt_Friday_Fantasy_BizarreBear_LOD0.SK_Agt_Friday_Fantasy_BizarreBear_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_BizarreBear_LOD0"
+        },
+        {
+          "name": "Fantasy_Chef",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_Chef/SK_Agt_Friday_Fantasy_Chef_LOD0.SK_Agt_Friday_Fantasy_Chef_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_Chef_LOD0"
+        },
+        {
+          "name": "Fantasy_Confectioner",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_Confectioner/SK_Agt_Friday_Fantasy_Confectioner_LOD0.SK_Agt_Friday_Fantasy_Confectioner_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_Confectioner_LOD0"
+        },
+        {
+          "name": "Fantasy_CrabShinobi",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_CrabShinobi/SK_Agt_Friday_Fantasy_CrabShinobi_LOD0.SK_Agt_Friday_Fantasy_CrabShinobi_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_CrabShinobi_LOD0"
+        },
+        {
+          "name": "Fantasy_FlameWarrior",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_FlameWarrior/SK_Agt_Friday_Fantasy_FlameWarrior_LOD0.SK_Agt_Friday_Fantasy_FlameWarrior_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_FlameWarrior_LOD0"
+        },
+        {
+          "name": "Fantasy_LuckyCat",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_LuckyCat/SK_Agt_Friday_Fantasy_LuckyCat_LOD0.SK_Agt_Friday_Fantasy_LuckyCat_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_LuckyCat_LOD0"
+        },
+        {
+          "name": "Fantasy_Sheriff",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fantasy/Fantasy_Sheriff/SK_Agt_Friday_Fantasy_Sheriff_LOD0.SK_Agt_Friday_Fantasy_Sheriff_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fantasy_Sheriff_LOD0"
+        },
+        {
+          "name": "Fleet_Sentinel",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Fleet/Fleet_Sentinel/SK_Agt_Friday_Fleet_Sentinel_LOD0.SK_Agt_Friday_Fleet_Sentinel_LOD0",
+          "mesh_name": "SK_Agt_Friday_Fleet_Sentinel_LOD0"
+        },
+        {
+          "name": "GoldenSpring_Casket",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_GoldenSpring/SK_Agt_Friday_GoldenSpring_Casket_LOD0.SK_Agt_Friday_GoldenSpring_Casket_LOD0",
+          "mesh_name": "SK_Agt_Friday_GoldenSpring_Casket_LOD0"
+        },
+        {
+          "name": "Heromask_Devil",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Heromask/Heromask_Devil/SK_Agt_Friday_Heromask_Devil_LOD0.SK_Agt_Friday_Heromask_Devil_LOD0",
+          "mesh_name": "SK_Agt_Friday_Heromask_Devil_LOD0"
+        },
+        {
+          "name": "Heromask_Hero",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Heromask/Heromask_Hero/SK_Agt_Friday_Heromask_Hero_LOD0.SK_Agt_Friday_Heromask_Hero_LOD0",
+          "mesh_name": "SK_Agt_Friday_Heromask_Hero_LOD0"
+        },
+        {
+          "name": "Heromask_Machinery",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Heromask/Heromask_Machinery/SK_Agt_Friday_Heromask_Machinery_LOD0.SK_Agt_Friday_Heromask_Machinery_LOD0",
+          "mesh_name": "SK_Agt_Friday_Heromask_Machinery_LOD0"
+        },
+        {
+          "name": "Heromask_Shark",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Heromask/Heromask_Shark/SK_Agt_Friday_Heromask_Shark_LOD0.SK_Agt_Friday_Heromask_Shark_LOD0",
+          "mesh_name": "SK_Agt_Friday_Heromask_Shark_LOD0"
+        },
+        {
+          "name": "Interstate5_Dieseloil",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Interstate5/Interstate5_Dieseloil/SK_Agt_Friday_Interstate5_Dieseloil_LOD0.SK_Agt_Friday_Interstate5_Dieseloil_LOD0",
+          "mesh_name": "SK_Agt_Friday_Interstate5_Dieseloil_LOD0"
+        },
+        {
+          "name": "Interstate5_Oldchap",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Interstate5/Interstate5_Oldchap/SK_Agt_Friday_Interstate5_Oldchap_LOD0.SK_Agt_Friday_Interstate5_Oldchap_LOD0",
+          "mesh_name": "SK_Agt_Friday_Interstate5_Oldchap_LOD0"
+        },
+        {
+          "name": "LoveWhisper_RomanceEnvoy",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_LoveWhisper_RomanceEnvoy/LoveWhisper_RomanceEnvoy/SK_Agt_Friday_LoveWhisper_RomanceEnvoy_LOD0.SK_Agt_Friday_LoveWhisper_RomanceEnvoy_LOD0",
+          "mesh_name": "SK_Agt_Friday_LoveWhisper_RomanceEnvoy_LOD0"
+        },
+        {
+          "name": "Mirage_BluePorcelain",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_BluePorcelain/SK_Agt_Friday_Mirage_BluePorcelain_LOD0.SK_Agt_Friday_Mirage_BluePorcelain_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_BluePorcelain_LOD0"
+        },
+        {
+          "name": "Mirage_Bronze",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_Bronze/SK_Agt_Friday_Mirage_Bronze_LOD0.SK_Agt_Friday_Mirage_Bronze_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_Bronze_LOD0"
+        },
+        {
+          "name": "Mirage_Cooking",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_Cooking/SK_Agt_Friday_Mirage_Cooking_LOD0.SK_Agt_Friday_Mirage_Cooking_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_Cooking_LOD0"
+        },
+        {
+          "name": "Mirage_ElegantFan",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_ElegantFan/SK_Agt_Friday_Mirage_ElegantFan_LOD0.SK_Agt_Friday_Mirage_ElegantFan_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_ElegantFan_LOD0"
+        },
+        {
+          "name": "Mirage_Flame",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_Flame/SK_Agt_Friday_Mirage_Flame_LOD0.SK_Agt_Friday_Mirage_Flame_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_Flame_LOD0"
+        },
+        {
+          "name": "Mirage_PurpleIron",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Mirage/Mirage_PurpleIron/SK_Agt_Friday_Mirage_PurpleIron_LOD0.SK_Agt_Friday_Mirage_PurpleIron_LOD0",
+          "mesh_name": "SK_Agt_Friday_Mirage_PurpleIron_LOD0"
+        },
+        {
+          "name": "NaughtyGhost_CandleLight",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_NaughtyGhost/NaughtyGhost_CandleLight/SK_Agt_Friday_NaughtyGhost_CandleLight_LOD0.SK_Agt_Friday_NaughtyGhost_CandleLight_LOD0",
+          "mesh_name": "SK_Agt_Friday_NaughtyGhost_CandleLight_LOD0"
+        },
+        {
+          "name": "NaughtyGhost_WizardHat",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_NaughtyGhost/NaughtyGhost_WizardHat/SK_Agt_Friday_NaughtyGhost_WizardHat_LOD0.SK_Agt_Friday_NaughtyGhost_WizardHat_LOD0",
+          "mesh_name": "SK_Agt_Friday_NaughtyGhost_WizardHat_LOD0"
+        },
+        {
+          "name": "NEW",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_New/SK_Agt_Friday_NEW_LOD0.SK_Agt_Friday_NEW_LOD0",
+          "mesh_name": "SK_Agt_Friday_NEW_LOD0"
+        },
+        {
+          "name": "Spring_VoidViolet",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Spring_VoidViolet/SK_Agt_Friday_Spring_VoidViolet_LOD0.SK_Agt_Friday_Spring_VoidViolet_LOD0",
+          "mesh_name": "SK_Agt_Friday_Spring_VoidViolet_LOD0"
+        },
+        {
+          "name": "Summer_BeachStar",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Summer/Summer_BeachStar/SK_Agt_Friday_Summer_BeachStar_LOD0.SK_Agt_Friday_Summer_BeachStar_LOD0",
+          "mesh_name": "SK_Agt_Friday_Summer_BeachStar_LOD0"
+        },
+        {
+          "name": "Summer_HoloSinger",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Summer/Summer_HoloSinger/SK_Agt_Friday_Summer_HoloSinger_LOD0.SK_Agt_Friday_Summer_HoloSinger_LOD0",
+          "mesh_name": "SK_Agt_Friday_Summer_HoloSinger_LOD0"
+        },
+        {
+          "name": "Thorn_Crown",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Friday_Thorn/Thorn_Crown/SK_Agt_Friday_Thorn_Crown_LOD0.SK_Agt_Friday_Thorn_Crown_LOD0",
+          "mesh_name": "SK_Agt_Friday_Thorn_Crown_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_Girl_Home",
+      "type": "Chr",
+      "variant_count": 14,
+      "variants": [
+        {
+          "name": "Classic_Qixi",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Classic_Qixi/SK_Chr_Girl_Home_Classic_Qixi_LOD0.SK_Chr_Girl_Home_Classic_Qixi_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Classic_Qixi_LOD0"
+        },
+        {
+          "name": "Crown",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Crown/Girl_Home_Crown/Girl_Home_Crown_LOD0.Girl_Home_Crown_LOD0",
+          "mesh_name": "Girl_Home_Crown_LOD0"
+        },
+        {
+          "name": "Dragon",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Dragon/Girl_Home_Dragon/SK_Chr_Girl_Home_Dragon_LOD0.SK_Chr_Girl_Home_Dragon_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Dragon_LOD0"
+        },
+        {
+          "name": "Ed_Blackgold",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Eveningdress/Eveningdress_Blackgold/SK_Chr_Girl_Home_Ed_Blackgold_Lod0.SK_Chr_Girl_Home_Ed_Blackgold_Lod0",
+          "mesh_name": "SK_Chr_Girl_Home_Ed_Blackgold_Lod0"
+        },
+        {
+          "name": "Ed_Whitepurple",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Eveningdress/Eveningdress_Whitepurple/SK_Chr_Girl_Home_Ed_Whitepurple_Lod0.SK_Chr_Girl_Home_Ed_Whitepurple_Lod0",
+          "mesh_name": "SK_Chr_Girl_Home_Ed_Whitepurple_Lod0"
+        },
+        {
+          "name": "Fantasy_Nekomaid",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Fantasy_Nekomaid/Girl_Home_Fantasy_Nekomaid/SK_Chr_Girl_Home_Fantasy_Nekomaid_LOD0.SK_Chr_Girl_Home_Fantasy_Nekomaid_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Fantasy_Nekomaid_LOD0"
+        },
+        {
+          "name": "Fleet",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Fleet/Girl_Home_Fleet/SK_Chr_Girl_Home_Fleet_LOD0.SK_Chr_Girl_Home_Fleet_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Fleet_LOD0"
+        },
+        {
+          "name": "Pumpkin",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Pumpkin/Girl_Home_Pumpkin/SK_Chr_Girl_Home_Pumpkin_LOD0.SK_Chr_Girl_Home_Pumpkin_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Pumpkin_LOD0"
+        },
+        {
+          "name": "Punk_Redblack",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Punk_Redblack/Girl_Home_Punk_Redblack/SK_Chr_Girl_Home_Punk_Redblack_LOD0.SK_Chr_Girl_Home_Punk_Redblack_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Punk_Redblack_LOD0"
+        },
+        {
+          "name": "Santa",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Santa/Girl_Home_Santa/Girl_Home_Santa_LOD0.Girl_Home_Santa_LOD0",
+          "mesh_name": "Girl_Home_Santa_LOD0"
+        },
+        {
+          "name": "SpringFestival",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_SpringFestival/Girl_Home_SpringFestival/Girl_Home_SpringFestival_LOD0.Girl_Home_SpringFestival_LOD0",
+          "mesh_name": "Girl_Home_SpringFestival_LOD0"
+        },
+        {
+          "name": "Summer",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Summer/Girl_Home_Summer/SK_Chr_Girl_Home_Summer_LOD0.SK_Chr_Girl_Home_Summer_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Summer_LOD0"
+        },
+        {
+          "name": "Sw_Blackpink",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Sw_Blackpink/Girl_Home_Sw_Blackpink/SK_Chr_Girl_Home_Sw_Blackpink_LOD0.SK_Chr_Girl_Home_Sw_Blackpink_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Sw_Blackpink_LOD0"
+        },
+        {
+          "name": "Winter",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Girl_Home_Winter/Girl_Home_Winter/SK_Chr_Girl_Home_Winter_LOD0.SK_Chr_Girl_Home_Winter_LOD0",
+          "mesh_name": "SK_Chr_Girl_Home_Winter_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Chr_Male",
+      "type": "Chr",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Male/SK_Chr_Male.SK_Chr_Male",
+          "mesh_name": "SK_Chr_Male"
+        },
+        {
+          "name": "LeadM_002",
+          "rel_path": "ArtResources/Characters/Chr/Chr_Male/SK_Chr_LeadM_002_LOD0.SK_Chr_LeadM_002_LOD0",
+          "mesh_name": "SK_Chr_LeadM_002_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Abstinence",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Abstinence/Cst_Abstinence_Light/SK_Cst_Abstinence_Light_LOD0.SK_Cst_Abstinence_Light_LOD0",
+          "mesh_name": "SK_Cst_Abstinence_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Admonition",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Admonition/Cst_Admonition_Odd/SK_Cst_Admonition_Odd_LOD0.SK_Cst_Admonition_Odd_LOD0",
+          "mesh_name": "SK_Cst_Admonition_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Airon",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Airon/Cst_Airon_Odd/SK_Cst_Airon_Odd_LOD0.SK_Cst_Airon_Odd_LOD0",
+          "mesh_name": "SK_Cst_Airon_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Airon/Cst_Airon_Odd_1/SK_Cst_Airon_Odd_1_LOD0.SK_Cst_Airon_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Airon_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Apate",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Apate/Cst_Apate_Odd/SK_Cst_Apate_Odd_LOD0.SK_Cst_Apate_Odd_LOD0",
+          "mesh_name": "SK_Cst_Apate_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Arielle",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Arielle/Cst_Arielle_Const/SK_Cst_Arielle_Const_LOD0.SK_Cst_Arielle_Const_LOD0",
+          "mesh_name": "SK_Cst_Arielle_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Ark",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ark/Cst_Ark_Disor/SK_Cst_Ark_Disor_LOD0.SK_Cst_Ark_Disor_LOD0",
+          "mesh_name": "SK_Cst_Ark_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Astarte",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Astarte/Cst_Astarte_Const/SK_Cst_Astarte_Const_LOD0.SK_Cst_Astarte_Const_LOD0",
+          "mesh_name": "SK_Cst_Astarte_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_AstarteMonster",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteMonster/Cst_AstarteMonster_Const/SK_Cst_AstarteMonster_Const_LOD0.SK_Cst_AstarteMonster_Const_LOD0",
+          "mesh_name": "SK_Cst_AstarteMonster_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_AstarteStage2",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteStage2/Cst_AstarteStage2_Const/SK_Cst_AstarteStage2_Const_LOD0.SK_Cst_AstarteStage2_Const_LOD0",
+          "mesh_name": "SK_Cst_AstarteStage2_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteStage2/Cst_AstarteStage2_Disor/SK_Cst_AstarteStage2_Disor_LOD0.SK_Cst_AstarteStage2_Disor_LOD0",
+          "mesh_name": "SK_Cst_AstarteStage2_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteStage2/Cst_AstarteStage2_Hollow/SK_Cst_AstarteStage2_Hollow_LOD0.SK_Cst_AstarteStage2_Hollow_LOD0",
+          "mesh_name": "SK_Cst_AstarteStage2_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteStage2/Cst_AstarteStage2_Light/SK_Cst_AstarteStage2_Light_LOD0.SK_Cst_AstarteStage2_Light_LOD0",
+          "mesh_name": "SK_Cst_AstarteStage2_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_AstarteStage2/Cst_AstarteStage2_Odd/SK_Cst_AstarteStage2_Odd_LOD0.SK_Cst_AstarteStage2_Odd_LOD0",
+          "mesh_name": "SK_Cst_AstarteStage2_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Aurola",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Aurola/Cst_Aurola_Hollow/SK_Cst_Aurola_Hollow_LOD0.SK_Cst_Aurola_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Aurola_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Aya",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Aya/Cst_Aya_Odd/SK_Cst_Aya_Odd_LOD0.SK_Cst_Aya_Odd_LOD0",
+          "mesh_name": "SK_Cst_Aya_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Aya/Cst_Aya_Odd_1/SK_Cst_Aya_Odd_1_LOD0.SK_Cst_Aya_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Aya_Odd_1_LOD0"
+        },
+        {
+          "name": "Odd_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Aya/Cst_Aya_Odd_2/SK_Cst_Aya_Odd_2_LOD0.SK_Cst_Aya_Odd_2_LOD0",
+          "mesh_name": "SK_Cst_Aya_Odd_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_BadLuck",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BadLuck/Cst_BadLuck_Const/SK_Cst_BadLuck_Const_LOD0.SK_Cst_BadLuck_Const_LOD0",
+          "mesh_name": "SK_Cst_BadLuck_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BadLuck/Cst_BadLuck_Hollow/SK_Cst_BadLuck_Hollow_LOD0.SK_Cst_BadLuck_Hollow_LOD0",
+          "mesh_name": "SK_Cst_BadLuck_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BadLuck/Cst_BadLuck_Light/SK_Cst_BadLuck_Light_LOD0.SK_Cst_BadLuck_Light_LOD0",
+          "mesh_name": "SK_Cst_BadLuck_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BadLuck/Cst_BadLuck_Odd/SK_Cst_BadLuck_Odd_LOD0.SK_Cst_BadLuck_Odd_LOD0",
+          "mesh_name": "SK_Cst_BadLuck_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Bastard",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bastard/Cst_Bastard_Light/SK_Cst_Bastard_Light_LOD0.SK_Cst_Bastard_Light_LOD0",
+          "mesh_name": "SK_Cst_Bastard_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bastard/Cst_Bastard_Odd/SK_Cst_Bastard_Odd_LOD0.SK_Cst_Bastard_Odd_LOD0",
+          "mesh_name": "SK_Cst_Bastard_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Batsby",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Batsby/Cst_Batsby_Odd/SK_Cst_Batsby_Odd_LOD0.SK_Cst_Batsby_Odd_LOD0",
+          "mesh_name": "SK_Cst_Batsby_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Batsby/Cst_Batsby_Odd_1/SK_Cst_Batsby_Odd_1_LOD0.SK_Cst_Batsby_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Batsby_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Beyontin",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Beyontin/Cst_Beyontin_Light/SK_Cst_Beyontin_Light_LOD0.SK_Cst_Beyontin_Light_LOD0",
+          "mesh_name": "SK_Cst_Beyontin_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Beyontin/Cst_Beyontin_Light_1/SK_Cst_Beyontin_Light_1_LOD0.SK_Cst_Beyontin_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Beyontin_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Bishop",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bishop/Cst_Bishop_Const/SK_Cst_Bishop_Const_LOD0.SK_Cst_Bishop_Const_LOD0",
+          "mesh_name": "SK_Cst_Bishop_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bishop/Cst_Bishop_Disor/SK_Cst_Bishop_Disor_LOD0.SK_Cst_Bishop_Disor_LOD0",
+          "mesh_name": "SK_Cst_Bishop_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_BloodDiamond",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BloodDiamond/Cst_BloodDiamond_Hollow/SK_Cst_BloodDiamond_Hollow.SK_Cst_BloodDiamond_Hollow",
+          "mesh_name": "SK_Cst_BloodDiamond_Hollow"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BloodDiamond/Cst_BloodDiamond_Light/Sk_Cst_BloodDiamond_Light_LOD0.Sk_Cst_BloodDiamond_Light_LOD0",
+          "mesh_name": "Sk_Cst_BloodDiamond_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_BloodDiamond/Cst_BloodDiamond_Odd/SK_Cst_BloodDiamond_Odd_LOD0.SK_Cst_BloodDiamond_Odd_LOD0",
+          "mesh_name": "SK_Cst_BloodDiamond_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Borgne",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Borgne/Cst_Borgne_Odd/SK_Cst_Borgne_Odd_LOD0.SK_Cst_Borgne_Odd_LOD0",
+          "mesh_name": "SK_Cst_Borgne_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Bornova",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bornova/Cst_Bornova_Odd/SK_Cst_Bornova_Odd_LOD0.SK_Cst_Bornova_Odd_LOD0",
+          "mesh_name": "SK_Cst_Bornova_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Bornova/Cst_Bornova_Odd_1/SK_Cst_Bornova_Odd_1_LOD0.SK_Cst_Bornova_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Bornova_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Cabala",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cabala/Cst_Cabala_Const/SK_Cst_Cabala_const_LOD0.SK_Cst_Cabala_Const_LOD0",
+          "mesh_name": "SK_Cst_Cabala_const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cabala/Cst_Cabala_Disor/SK_Cst_Cabala_Disor_LOD0.SK_Cst_Cabala_Disor_LOD0",
+          "mesh_name": "SK_Cst_Cabala_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cabala/Cst_Cabala_Hollow/SK_Cst_Cabala_Hollow_LOD0.SK_Cst_Cabala_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Cabala_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cabala/Cst_Cabala_Light/SK_Cst_Cabala_Light_LOD0.SK_Cst_Cabala_Light_LOD0",
+          "mesh_name": "SK_Cst_Cabala_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cabala/Cst_Cabala_Odd/SK_Cst_Cabala_Odd_LOD0.SK_Cst_Cabala_Odd_LOD0",
+          "mesh_name": "SK_Cst_Cabala_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Cachi",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cachi/Cst_Cachi_Disor/SK_Cst_Cachi_Disor_LOD0.SK_Cst_Cachi_Disor_LOD0",
+          "mesh_name": "SK_Cst_Cachi_Disor_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cachi/Cst_Cachi_Light/SK_Cst_Cachi_Light_LOD0.SK_Cst_Cachi_Light_LOD0",
+          "mesh_name": "SK_Cst_Cachi_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_CardManBlack",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_CardManBlack/Cst_CardManBlack_Odd/SK_Cst_CardManBlack_Odd_LOD0.SK_Cst_CardManBlack_Odd_LOD0",
+          "mesh_name": "SK_Cst_CardManBlack_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_CardManWhite",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_CardManWhite/Cst_CardManWhite_Odd/SK_Cst_CardManWhite_Odd_LOD0.SK_Cst_CardManWhite_Odd_LOD0",
+          "mesh_name": "SK_Cst_CardManWhite_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Celince",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Celince/Cst_Celince_Hollow/SK_Cst_Celince_Hollow_LOD0.SK_Cst_Celince_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Celince_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_ClockDoll",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ClockDoll/Cst_ClockDoll_Light/SK_Cst_ClockDoll_Light_LOD0.SK_Cst_ClockDoll_Light_LOD0",
+          "mesh_name": "SK_Cst_ClockDoll_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_CorpseCol",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_CorpseCol/Cst_CorpseCol_Disor/SK_Cst_CorpseCol_Disor_LOD0.SK_Cst_CorpseCol_Disor_LOD0",
+          "mesh_name": "SK_Cst_CorpseCol_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Cyborg",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cyborg/Cst_Cyborg_Disor/SK_Cst_Cyborg_Disor_LOD0.SK_Cst_Cyborg_Disor_LOD0",
+          "mesh_name": "SK_Cst_Cyborg_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Cyborg/Cst_Cyborg_Hollow/SK_Cst_Cyborg_Hollow_LOD0.SK_Cst_Cyborg_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Cyborg_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Dahlia",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Dahlia/Cst_Dahlia_Hollow/SK_Cst_Dahlia_Hollow_LOD0.SK_Cst_Dahlia_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Dahlia_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Danvery",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Danvery/Cst_Danvery_Odd/SK_Cst_Danvery_Odd_LOD0.SK_Cst_Danvery_Odd_LOD0",
+          "mesh_name": "SK_Cst_Danvery_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Defender",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Defender/Cst_Defender_Const/SK_Cst_Defender_Const_LOD0.SK_Cst_Defender_Const_LOD0",
+          "mesh_name": "SK_Cst_Defender_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Defender/Cst_Defender_Disor/SK_Cst_Defender_Disor_LOD0.SK_Cst_Defender_Disor_LOD0",
+          "mesh_name": "SK_Cst_Defender_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Defender/Cst_Defender_Hollow/SK_Cst_Defender_Hollow_LOD0.SK_Cst_Defender_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Defender_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Defender/Cst_Defender_Light/SK_Cst_Defender_Light_LOD0.SK_Cst_Defender_Light_LOD0",
+          "mesh_name": "SK_Cst_Defender_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Diligent",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Diligent/Cst_Diligent_Const/SK_Cst_Diligent_Const_LOD0.SK_Cst_Diligent_Const_LOD0",
+          "mesh_name": "SK_Cst_Diligent_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_DiligentUpgrade",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_DiligentUpgrade/Cst_DiligentUpgrade_Const/SK_Cst_DiligentUpgrade_Const_LOD0.SK_Cst_DiligentUpgrade_Const_LOD0",
+          "mesh_name": "SK_Cst_DiligentUpgrade_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Dizzy",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Dizzy/Cst_Dizzy_Disor/SK_Cst_Dizzy_Disor_LOD0.SK_Cst_Dizzy_Disor_LOD0",
+          "mesh_name": "SK_Cst_Dizzy_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_DokiDoki",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_DokiDoki/Cst_DokiDoki_Const/SK_Cst_DokiDoki_Const_LOD0.SK_Cst_DokiDoki_Const_LOD0",
+          "mesh_name": "SK_Cst_DokiDoki_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_DokiDoki/Cst_DokiDoki_Disor/SK_Cst_DokiDoki_Disor.SK_Cst_DokiDoki_Disor",
+          "mesh_name": "SK_Cst_DokiDoki_Disor"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_DokiHero",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_DokiHero/Cst_DokiHero_Const/SK_Cst_DokiHero_Const_LOD0.SK_Cst_DokiHero_Const_LOD0",
+          "mesh_name": "SK_Cst_DokiHero_Const_LOD0"
+        },
+        {
+          "name": "Const_Harmony",
+          "rel_path": "ArtResources/Characters/Cst/Cst_DokiHero/Cst_DokiHero_Const_Harmony/SK_Cst_DokiHero_Const_Harmony_LOD0.SK_Cst_DokiHero_Const_Harmony_LOD0",
+          "mesh_name": "SK_Cst_DokiHero_Const_Harmony_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Dolores",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Dolores/Cst_Dolores_Const/SK_Cst_Dolores_Const_LOD0.SK_Cst_Dolores_Const_LOD0",
+          "mesh_name": "SK_Cst_Dolores_Const_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Dolores/Cst_Dolores_Light/SK_Cst_Dolores_Light_LOD0.SK_Cst_Dolores_Light_LOD0",
+          "mesh_name": "SK_Cst_Dolores_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Durand",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor_LO0",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Durand/Cst_Durand_Disor/SK_Cst_Durand_Disor_LO0.SK_Cst_Durand_Disor_LO0",
+          "mesh_name": "SK_Cst_Durand_Disor_LO0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Durandor",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Durandor/Cst_Durandor_Const/Sk_Cst_Durandor_Const_LOD0.Sk_Cst_Durandor_Const_LOD0",
+          "mesh_name": "Sk_Cst_Durandor_Const_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Durandor/Cst_Durandor_Light/Sk_Cst_Durandor_Light_LOD0.Sk_Cst_Durandor_Light_LOD0",
+          "mesh_name": "Sk_Cst_Durandor_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Durandor/Cst_Durandor_Odd/Sk_Cst_Durandor_Odd_LOD0.Sk_Cst_Durandor_Odd_LOD0",
+          "mesh_name": "Sk_Cst_Durandor_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Experimenter",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Experimenter/Cst_Experimenter_Disor/SK_Cst_Experimenter_Disor_LOD0.SK_Cst_Experimenter_Disor_LOD0",
+          "mesh_name": "SK_Cst_Experimenter_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Experimenter/Cst_Experimenter_Hollow/SK_Cst_Experimenter_Hollow_LOD0.SK_Cst_Experimenter_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Experimenter_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Experimenter41",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Experimenter41/Cst_Experimenter41_Const/SK_Cst_Experimenter41_Const_LOD0.SK_Cst_Experimenter41_Const_LOD0",
+          "mesh_name": "SK_Cst_Experimenter41_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Experimenter41/Cst_Experimenter41_Hollow/SK_Cst_Experimenter41_Hollow_LOD0.SK_Cst_Experimenter41_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Experimenter41_Hollow_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Experimenter41/Cst_Experimenter41_Odd/SK_Cst_Experimenter41_Odd_LOD0.SK_Cst_Experimenter41_Odd_LOD0",
+          "mesh_name": "SK_Cst_Experimenter41_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_ExperimenterUpgrade",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ExperimenterUpgrade/Cst_ExperimenterUpgrade_Hollow/SK_Cst_ExperimenterUpgrade_Hollow_LOD0.SK_Cst_ExperimenterUpgrade_Hollow_LOD0",
+          "mesh_name": "SK_Cst_ExperimenterUpgrade_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Febian",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Febian/Cst_Febian_Const/SK_Cst_Febian_Const_LOD0.SK_Cst_Febian_Const_LOD0",
+          "mesh_name": "SK_Cst_Febian_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Febian/Cst_Febian_Disor/SK_Cst_Febian_Disor_LOD0.SK_Cst_Febian_Disor_LOD0",
+          "mesh_name": "SK_Cst_Febian_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Femorian",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Femorian/Cst_Femorian_Light/SK_Cst_Femorian_Light_LOD0.SK_Cst_Femorian_Light_LOD0",
+          "mesh_name": "SK_Cst_Femorian_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Femorian/Cst_Femorian_Light_1/SK_Cst_Femorian_Light_1_LOD0.SK_Cst_Femorian_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Femorian_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Flowerelfstage1",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Flowerelfstage1/Cst_Flowerelfstage1_Hollow/SK_Cst_Flowerelfstage1_Hollow_LOD0.SK_Cst_Flowerelfstage1_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Flowerelfstage1_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Flowerelfstage2",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Flowerelfstage2/Cst_Flowerelfstage2_Hollow/SK_Cst_Flowerelfstage2_Hollow_LOD0.SK_Cst_Flowerelfstage2_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Flowerelfstage2_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_FocusedUpgrade",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_FocusedUpgrade/Cst_FocusedUpgrade_Hollow/SK_Cst_FocusedUpgrade_Hollow_LOD0.SK_Cst_FocusedUpgrade_Hollow_LOD0",
+          "mesh_name": "SK_Cst_FocusedUpgrade_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Freya",
+      "type": "Cst",
+      "variant_count": 6,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow/SK_Cst_Freya_Hollow_LOD0.SK_Cst_Freya_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow_1/SK_Cst_Freya_Hollow_1_LOD0.SK_Cst_Freya_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_1_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow_Harmony/SK_Cst_Freya_Hollow_Harmony_LOD0.SK_Cst_Freya_Hollow_Harmony_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_Harmony_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow_Harmony_1/SK_Cst_Freya_Hollow_Harmony_1_LOD0.SK_Cst_Freya_Hollow_Harmony_1_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_Harmony_1_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow_Harmony_Top/SK_Cst_Freya_Hollow_Harmony_Top_LOD0.SK_Cst_Freya_Hollow_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_Harmony_Top_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_Top_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Freya/Cst_Freya_Hollow_Harmony_Top_1/SK_Cst_Freya_Hollow_Harmony_Top_1_LOD0.SK_Cst_Freya_Hollow_Harmony_Top_1_LOD0",
+          "mesh_name": "SK_Cst_Freya_Hollow_Harmony_Top_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Fungus",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Fungus/Cst_Fungus_Light/SK_Cst_Fungus_Light_LOD0.SK_Cst_Fungus_Light_LOD0",
+          "mesh_name": "SK_Cst_Fungus_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Fuqiu",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Fuqiu/Cst_Fuqiu_Hollow/SK_Cst_Fuqiu_Hollow_LOD0.SK_Cst_Fuqiu_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Fuqiu_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Fuqiu/Cst_Fuqiu_Hollow_1/SK_Cst_Fuqiu_Hollow_1_LOD0.SK_Cst_Fuqiu_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Fuqiu_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_GenerousA",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GenerousA/Cst_GenerousA_Odd/SK_Cst_GenerousA_Odd_LOD0.SK_Cst_GenerousA_Odd_LOD0",
+          "mesh_name": "SK_Cst_GenerousA_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_GhostMagic",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GhostMagic/Cst_GhostMagic_Disor/SK_Cst_GhostMagic_Disor_LOD0.SK_Cst_GhostMagic_Disor_LOD0",
+          "mesh_name": "SK_Cst_GhostMagic_Disor_LOD0"
+        },
+        {
+          "name": "Disor_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GhostMagic/Cst_GhostMagic_Disor_1/SK_Cst_GhostMagic_Disor_1_LOD0.SK_Cst_GhostMagic_Disor_1_LOD0",
+          "mesh_name": "SK_Cst_GhostMagic_Disor_1_LOD0"
+        },
+        {
+          "name": "Disor_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GhostMagic/Cst_GhostMagic_Disor_2/SK_Cst_GhostMagic_Disor_2_LOD0.SK_Cst_GhostMagic_Disor_2_LOD0",
+          "mesh_name": "SK_Cst_GhostMagic_Disor_2_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GhostMagic/Cst_GhostMagic_Light/SK_Cst_GhostMagic_Light_LOD0.SK_Cst_GhostMagic_Light_LOD0",
+          "mesh_name": "SK_Cst_GhostMagic_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Gianc",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gianc/Cst_Gianc_Light/SK_Cst_Gianc_Light_LOD0.SK_Cst_Gianc_Light_LOD0",
+          "mesh_name": "SK_Cst_Gianc_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gianc/Cst_Gianc_Light_1/SK_Cst_Gianc_Light_1_LOD0.SK_Cst_Gianc_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Gianc_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_GluttonyThorn",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_GluttonyThorn/Cst_GluttonyThorn_Hollow/SK_Cst_GluttonyThorn_Hollow_LOD0.SK_Cst_GluttonyThorn_Hollow_LOD0",
+          "mesh_name": "SK_Cst_GluttonyThorn_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Gorilla",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gorilla/Cst_Gorilla_Disor/SK_Cst_Gorilla_Disor_LOD0.SK_Cst_Gorilla_Disor_LOD0",
+          "mesh_name": "SK_Cst_Gorilla_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Gray",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gray/Cst_Gray_Disor/SK_Cst_Gray_Disor_LOD0.SK_Cst_Gray_Disor_LOD0",
+          "mesh_name": "SK_Cst_Gray_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gray/Cst_Gray_Hollow/SK_Cst_Gray_Hollow_LOD0.SK_Cst_Gray_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Gray_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gray/Cst_Gray_Light/SK_Cst_Gray_Light_LOD0.SK_Cst_Gray_Light_LOD0",
+          "mesh_name": "SK_Cst_Gray_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Gray/Cst_Gray_Odd/SK_Cst_Gray_Odd_LOD0.SK_Cst_Gray_Odd_LOD0",
+          "mesh_name": "SK_Cst_Gray_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Groupie",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Groupie/Cst_Groupie_Light/SK_Cst_Groupie_Light_LOD0.SK_Cst_Groupie_Light_LOD0",
+          "mesh_name": "SK_Cst_Groupie_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Guard",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Guard/Cst_Guard_Disor/SK_Cst_Guard_Disor.SK_Cst_Guard_Disor",
+          "mesh_name": "SK_Cst_Guard_Disor"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Guard/Cst_Guard_Light/SK_Cst_Guard_Light.SK_Cst_Guard_Light",
+          "mesh_name": "SK_Cst_Guard_Light"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Guard/Cst_Guard_Odd/SK_Cst_Guard_Odd.SK_Cst_Guard_Odd",
+          "mesh_name": "SK_Cst_Guard_Odd"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_HardShield",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "default",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HardShield/Cst_HardShield_Hollow/SK_Cst_HardShield_LOD0.SK_Cst_HardShield_LOD0",
+          "mesh_name": "SK_Cst_HardShield_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HardShield/Cst_HardShield_Light/SK_Cst_HardShield_Light_LOD0.SK_Cst_HardShield_Light_LOD0",
+          "mesh_name": "SK_Cst_HardShield_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HardShield/Cst_HardShield_Odd/SK_Cst_HardShield_Odd.SK_Cst_HardShield_Odd",
+          "mesh_name": "SK_Cst_HardShield_Odd"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Helkid",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Helkid/Cst_Helkid_Light/SK_Cst_Helkid_Light_LOD0.SK_Cst_Helkid_Light_LOD0",
+          "mesh_name": "SK_Cst_Helkid_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_HelkidBOSS",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HelkidBOSS/Cst_HelkidBOSS_Light/SK_Cst_HelkidBOSS_Light_LOD0.SK_Cst_HelkidBOSS_Light_LOD0",
+          "mesh_name": "SK_Cst_HelkidBOSS_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_HemoWraith",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HemoWraith/Cst_HemoWraith_Light/SK_Cst_HemoWraith_Light_LOD0.SK_Cst_HemoWraith_Light_LOD0",
+          "mesh_name": "SK_Cst_HemoWraith_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_HeroicUpgrade",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HeroicUpgrade/Cst_HeroicUpgrade_Light/SK_Cst_HeroicUpgrade_Light_LOD0.SK_Cst_HeroicUpgrade_Light_LOD0",
+          "mesh_name": "SK_Cst_HeroicUpgrade_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Holden",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Holden/Cst_Holden_Light/SK_Cst_Holden_Light_LOD0.SK_Cst_Holden_Light_LOD0",
+          "mesh_name": "SK_Cst_Holden_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Holden/Cst_Holden_Light_1/SK_Cst_Holden_Light_1_LOD0.SK_Cst_Holden_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Holden_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Honest",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Honest/Cst_Honest_Hollow/SK_Cst_Honest_Hollow_LOD0.SK_Cst_Honest_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Honest_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_HorrorCrow",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_HorrorCrow/Cst_HorrorCrow_Hollow/SK_Cst_HorrorCrow_Hollow_LOD0.SK_Cst_HorrorCrow_Hollow_LOD0",
+          "mesh_name": "SK_Cst_HorrorCrow_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Hoyan",
+      "type": "Cst",
+      "variant_count": 6,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow/SK_Cst_Hoyan_Hollow_LOD0.SK_Cst_Hoyan_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow_1/SK_Cst_Hoyan_Hollow_1_LOD0.SK_Cst_Hoyan_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_1_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow_Harmony/SK_Cst_Hoyan_Hollow_Harmony_LOD0.SK_Cst_Hoyan_Hollow_Harmony_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_Harmony_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow_Harmony_1/SK_Cst_Hoyan_Hollow_Harmony_1_LOD0.SK_Cst_Hoyan_Hollow_Harmony_1_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_Harmony_1_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow_Harmony_Untattooed/SK_Cst_Hoyan_Hollow_Harmony_Untattooed_LOD0.SK_Cst_Hoyan_Hollow_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_Harmony_Untattooed_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_Untattooed_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Hoyan/Cst_Hoyan_Hollow_Harmony_Untattooed_1/SK_Cst_Hoyan_Hollow_Harmony_Untattooed_1_LOD0.SK_Cst_Hoyan_Hollow_Harmony_Untattooed_1_LOD0",
+          "mesh_name": "SK_Cst_Hoyan_Hollow_Harmony_Untattooed_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_JackO",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_JackO/Cst_JackO_Hollow/SK_Cst_JackO_Hollow_LOD0.SK_Cst_JackO_Hollow_LOD0",
+          "mesh_name": "SK_Cst_JackO_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Jellyfish",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Jellyfish/Cst_Jellyfish_Hollow/SK_Cst_Jellyfish_Hollow_LOD0.SK_Cst_Jellyfish_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Jellyfish_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Jugg",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Alpha",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Jugg/Cst_Jugg_Alpha/Cst_Jugg_Alpha.Cst_Jugg_Alpha",
+          "mesh_name": "Cst_Jugg_Alpha"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Jugg/Cst_Jugg_Hollow/SK_Cst_Jugg_Hollow_LOD0.SK_Cst_Jugg_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Jugg_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kabbalah",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kabbalah/Cst_Kabbalah_Const/SK_Cst_Kabbalah_Const_LOD0.SK_Cst_Kabbalah_Const_LOD0",
+          "mesh_name": "SK_Cst_Kabbalah_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kabbalah/Cst_Kabbalah_Disor/SK_Cst_Kabbalah_Disor_LOD0.SK_Cst_Kabbalah_Disor_LOD0",
+          "mesh_name": "SK_Cst_Kabbalah_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kabbalah/Cst_Kabbalah_Hollow/SK_Cst_Kabbalah_Hollow_LOD0.SK_Cst_Kabbalah_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Kabbalah_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kabbalah/Cst_Kabbalah_Light/SK_Cst_Kabbalah_Light_LOD0.SK_Cst_Kabbalah_Light_LOD0",
+          "mesh_name": "SK_Cst_Kabbalah_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kabbalah/Cst_Kabbalah_Odd/SK_Cst_Kabbalah_Odd_LOD0.SK_Cst_Kabbalah_Odd_LOD0",
+          "mesh_name": "SK_Cst_Kabbalah_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_KabbalahBOSS",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahBOSS/Cst_KabbalahBOSS_Const/SK_Cst_KabbalahBOSS_Const_LOD0.SK_Cst_KabbalahBOSS_Const_LOD0",
+          "mesh_name": "SK_Cst_KabbalahBOSS_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahBOSS/Cst_KabbalahBOSS_Disor/SK_Cst_KabbalahBOSS_Disor_LOD0.SK_Cst_KabbalahBOSS_Disor_LOD0",
+          "mesh_name": "SK_Cst_KabbalahBOSS_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahBOSS/Cst_KabbalahBOSS_Hollow/SK_Cst_KabbalahBOSS_Hollow_LOD0.SK_Cst_KabbalahBOSS_Hollow_LOD0",
+          "mesh_name": "SK_Cst_KabbalahBOSS_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahBOSS/Cst_KabbalahBOSS_Light/SK_Cst_KabbalahBOSS_Light_LOD0.SK_Cst_KabbalahBOSS_Light_LOD0",
+          "mesh_name": "SK_Cst_KabbalahBOSS_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahBOSS/Cst_KabbalahBOSS_Odd/SK_Cst_KabbalahBOSS_Odd_LOD0.SK_Cst_KabbalahBOSS_Odd_LOD0",
+          "mesh_name": "SK_Cst_KabbalahBOSS_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_KabbalahElite",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahElite/Cst_KabbalahElite_Const/SK_Cst_KabbalahElite_Const_LOD0.SK_Cst_KabbalahElite_Const_LOD0",
+          "mesh_name": "SK_Cst_KabbalahElite_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahElite/Cst_KabbalahElite_Disor/SK_Cst_KabbalahElite_Disor_LOD0.SK_Cst_KabbalahElite_Disor_LOD0",
+          "mesh_name": "SK_Cst_KabbalahElite_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahElite/Cst_KabbalahElite_Hollow/SK_Cst_KabbalahElite_Hollow_LOD0.SK_Cst_KabbalahElite_Hollow_LOD0",
+          "mesh_name": "SK_Cst_KabbalahElite_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahElite/Cst_KabbalahElite_Light/SK_Cst_KabbalahElite_Light_LOD0.SK_Cst_KabbalahElite_Light_LOD0",
+          "mesh_name": "SK_Cst_KabbalahElite_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KabbalahElite/Cst_KabbalahElite_Odd/SK_Cst_KabbalahElite_Odd_LOD0.SK_Cst_KabbalahElite_Odd_LOD0",
+          "mesh_name": "SK_Cst_KabbalahElite_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kazama",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kazama/Cst_Kazama_Hollow/SK_Cst_Kazama_Hollow_LOD0.SK_Cst_Kazama_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Kazama_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kazama/Cst_Kazama_Light/SK_Cst_Kazama_Light_LOD0.SK_Cst_Kazama_Light_LOD0",
+          "mesh_name": "SK_Cst_Kazama_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kethos",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kethos/Cst_Kethos_Odd/SK_Cst_Kethos_Odd_LOD0.SK_Cst_Kethos_Odd_LOD0",
+          "mesh_name": "SK_Cst_Kethos_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kethos/Cst_Kethos_Odd_1/SK_Cst_Kethos_Odd_1_LOD0.SK_Cst_Kethos_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Kethos_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Khloros",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Khloros/Cst_Khloros_Hollow/SK_Cst_Khloros_Hollow_LOD0.SK_Cst_Khloros_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Khloros_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_KhlorosBOSS",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_KhlorosBOSS/Cst_KhlorosBOSS_Hollow/SK_Cst_KhlorosBOSS_Hollow_LOD0.SK_Cst_KhlorosBOSS_Hollow_LOD0",
+          "mesh_name": "SK_Cst_KhlorosBOSS_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kirkcaldy",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kirkcaldy/Cst_Kirkcaldy_Light/SK_Cst_Kirkcaldy_Light_LOD0.SK_Cst_Kirkcaldy_Light_LOD0",
+          "mesh_name": "SK_Cst_Kirkcaldy_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kirkcaldy/Cst_Kirkcaldy_Light_1/SK_Cst_Kirkcaldy_Light_1_LOD0.SK_Cst_Kirkcaldy_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Kirkcaldy_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kloss",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kloss/Cst_Kloss_Odd/SK_Cst_Kloss_Odd_LOD0.SK_Cst_Kloss_Odd_LOD0",
+          "mesh_name": "SK_Cst_Kloss_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kloss/Cst_Kloss_Odd_1/SK_Cst_Kloss_Odd_1_LOD0.SK_Cst_Kloss_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Kloss_Odd_1_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kloss/Cst_Kloss_Odd_Harmony_Top/SK_Cst_Kloss_Odd_Harmony_Top_LOD0.SK_Cst_Kloss_Odd_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Kloss_Odd_Harmony_Top_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Top_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kloss/Cst_Kloss_Odd_Harmony_Top_1/SK_Cst_Kloss_Odd_Harmony_Top_1_LOD0.SK_Cst_Kloss_Odd_Harmony_Top_1_LOD0",
+          "mesh_name": "SK_Cst_Kloss_Odd_Harmony_Top_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Knight",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Knight/Cst_Knight_Const/SK_Cst_Knight_Const_LOD0.SK_Cst_Knight_Const_LOD0",
+          "mesh_name": "SK_Cst_Knight_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Knight/Cst_Knight_Disor/SK_Cst_Knight_Disor_LOD0.SK_Cst_Knight_Disor_LOD0",
+          "mesh_name": "SK_Cst_Knight_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kraken",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kraken/Cst_Kraken_Hollow/SK_Cst_Kraken_Hollow_LOD0.SK_Cst_Kraken_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Kraken_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kraken/Cst_Kraken_Hollow_Harmony_Untattooed/SK_Cst_Kraken_Hollow_Harmony_Untattooed_LOD0.SK_Cst_Kraken_Hollow_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_Kraken_Hollow_Harmony_Untattooed_LOD0"
+        },
+        {
+          "name": "Hollow_Suitcase_Rig",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kraken/Cst_Kraken_Hollow/Suitcase/SK_Cst_Kraken_Hollow_Suitcase_Rig.SK_Cst_Kraken_Hollow_Suitcase_Rig",
+          "mesh_name": "SK_Cst_Kraken_Hollow_Suitcase_Rig"
+        },
+        {
+          "name": "Hollow_Tentacle_Rig",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kraken/Cst_Kraken_Hollow/Tentacle/SK_Cst_Kraken_Hollow_Tentacle_Rig.SK_Cst_Kraken_Hollow_Tentacle_Rig",
+          "mesh_name": "SK_Cst_Kraken_Hollow_Tentacle_Rig"
+        },
+        {
+          "name": "tentacle_cs",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kraken/Cst_Kraken_Hollow/TentacleCS/tentacle_cs.tentacle_cs",
+          "mesh_name": "tentacle_cs"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kululu",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kululu/Cst_Kululu_Hollow/SK_Cst_Kululu_Hollow_LOD0.SK_Cst_Kululu_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Kululu_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Kylor",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kylor/Cst_Kylor_Odd/SK_Cst_Kylor_Odd_LOD0.SK_Cst_Kylor_Odd_LOD0",
+          "mesh_name": "SK_Cst_Kylor_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Kylor/Cst_Kylor_Odd_1/SK_Cst_Kylor_Odd_1_LOD0.SK_Cst_Kylor_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Kylor_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lian",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lian/Cst_Lian_Light/SK_Cst_Lian_Light_LOD0.SK_Cst_Lian_Light_LOD0",
+          "mesh_name": "SK_Cst_Lian_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lian/Cst_Lian_Light_1/SK_Cst_Lian_Light_1_LOD0.SK_Cst_Lian_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Lian_Light_1_LOD0"
+        },
+        {
+          "name": "Light_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lian/Cst_Lian_Light_Harmony_Top/SK_Cst_Lian_Light_Harmony_Top_LOD0.SK_Cst_Lian_Light_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Lian_Light_Harmony_Top_LOD0"
+        },
+        {
+          "name": "Light_Harmony_Top_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lian/Cst_Lian_Light_Harmony_Top_1/SK_Cst_Lian_Light_Harmony_Top_1_LOD0.SK_Cst_Lian_Light_Harmony_Top_1_LOD0",
+          "mesh_name": "SK_Cst_Lian_Light_Harmony_Top_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lighting",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lighting/Cst_Lighting_Light/SK_Cst_Lighting_Light_LOD0.SK_Cst_Lighting_Light_LOD0",
+          "mesh_name": "SK_Cst_Lighting_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Liliam",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Liliam/Cst_Liliam_Disor/SK_Cst_Liliam_Disor_LOD0.SK_Cst_Liliam_Disor_LOD0",
+          "mesh_name": "SK_Cst_Liliam_Disor_LOD0"
+        },
+        {
+          "name": "Disor_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Liliam/Cst_Liliam_Disor_1/SK_Cst_Liliam_Disor_1_LOD0.SK_Cst_Liliam_Disor_1_LOD0",
+          "mesh_name": "SK_Cst_Liliam_Disor_1_LOD0"
+        },
+        {
+          "name": "Disor_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Liliam/Cst_Liliam_Disor_2/SK_Cst_Liliam_Disor_2_LOD0.SK_Cst_Liliam_Disor_2_LOD0",
+          "mesh_name": "SK_Cst_Liliam_Disor_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lilith",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lilith/Cst_Lilith_Hollow/SK_Cst_Lilith_Hollow_LOD0.SK_Cst_Lilith_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Lilith_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lin",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lin/Cst_Lin_Light/SK_Cst_Lin_Light_LOD0.SK_Cst_Lin_Light_LOD0",
+          "mesh_name": "SK_Cst_Lin_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lin/Cst_Lin_Odd/SK_Cst_Lin_Odd_LOD0.SK_Cst_Lin_Odd_LOD0",
+          "mesh_name": "SK_Cst_Lin_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lindelle",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lindelle/Cst_Lindelle_Const/SK_Cst_Lindelle_Const_LOD0.SK_Cst_Lindelle_Const_LOD0",
+          "mesh_name": "SK_Cst_Lindelle_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lindelle/Cst_Lindelle_Hollow/SK_Cst_Lindelle_Hollow_LOD0.SK_Cst_Lindelle_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Lindelle_Hollow_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lindelle/Cst_Lindelle_Odd/SK_Cst_Lindelle_Odd_LOD0.SK_Cst_Lindelle_Odd_LOD0",
+          "mesh_name": "SK_Cst_Lindelle_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_LindelleAngel",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleAngel/Cst_LindelleAngel_Const/SK_Cst_LindelleAngel_Const_LOD0.SK_Cst_LindelleAngel_Const_LOD0",
+          "mesh_name": "SK_Cst_LindelleAngel_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleAngel/Cst_LindelleAngel_Hollow/SK_Cst_LindelleAngel_Hollow_LOD0.SK_Cst_LindelleAngel_Hollow_LOD0",
+          "mesh_name": "SK_Cst_LindelleAngel_Hollow_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleAngel/Cst_LindelleAngel_Odd/SK_Cst_LindelleAngel_Odd_LOD0.SK_Cst_LindelleAngel_Odd_LOD0",
+          "mesh_name": "SK_Cst_LindelleAngel_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_LindelleAngelB",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleAngelB/Cst_LindelleAngelB_Const/SK_Cst_LindelleAngelB_Const_LOD0.SK_Cst_LindelleAngelB_Const_LOD0",
+          "mesh_name": "SK_Cst_LindelleAngelB_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_LindelleAngelC",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleAngelC/Cst_LindelleAngelC_Const/SK_Cst_LindelleAngelC_Const_LOD0.SK_Cst_LindelleAngelC_Const_LOD0",
+          "mesh_name": "SK_Cst_LindelleAngelC_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_LindelleB",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleB/Cst_LindelleB_Const/SK_Cst_LindelleB_Const_LOD0.SK_Cst_LindelleB_Const_LOD0",
+          "mesh_name": "SK_Cst_LindelleB_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_LindelleC",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_LindelleC/Cst_LindelleC_Const/SK_Cst_LindelleC_Const_LOD0.SK_Cst_LindelleC_Const_LOD0",
+          "mesh_name": "SK_Cst_LindelleC_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Lingluo",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lingluo/Cst_Lingluo_Odd/SK_Cst_Lingluo_Odd_LOD0.SK_Cst_Lingluo_Odd_LOD0",
+          "mesh_name": "SK_Cst_Lingluo_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lingluo/Cst_Lingluo_Odd_1/SK_Cst_Lingluo_Odd_1_LOD0.SK_Cst_Lingluo_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Lingluo_Odd_1_LOD0"
+        },
+        {
+          "name": "Odd_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Lingluo/Cst_Lingluo_Odd_2/SK_Cst_Lingluo_Odd_2_LOD0.SK_Cst_Lingluo_Odd_2_LOD0",
+          "mesh_name": "SK_Cst_Lingluo_Odd_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Luvia",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Luvia/Cst_Luvia_Odd/SK_Cst_Luvia_Odd_LOD0.SK_Cst_Luvia_Odd_LOD0",
+          "mesh_name": "SK_Cst_Luvia_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Luvia/Cst_Luvia_Odd_1/SK_Cst_Luvia_Odd_1_LOD0.SK_Cst_Luvia_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Luvia_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_MagicRabbit",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_MagicRabbit/Cst_MagicRabbit_Disor/SK_Cst_MagicRabbit_Disor.SK_Cst_MagicRabbit_Disor",
+          "mesh_name": "SK_Cst_MagicRabbit_Disor"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Makoto",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Makoto/Cst_Makoto_Hollow/SK_Cst_Makoto_Hollow_LOD0.SK_Cst_Makoto_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Makoto_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Malak",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Malak/Cst_Malak_Odd/SK_Cst_Malak_Odd_LOD0.SK_Cst_Malak_Odd_LOD0",
+          "mesh_name": "SK_Cst_Malak_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Mari",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Mari/Cst_Mari_Disor/SK_Cst_Mari_Disor_LOD0.SK_Cst_Mari_Disor_LOD0",
+          "mesh_name": "SK_Cst_Mari_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Marvell",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Marvell/Cst_Marvell_Const/SK_Cst_Marvell_Const_LOD0.SK_Cst_Marvell_Const_LOD0",
+          "mesh_name": "SK_Cst_Marvell_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Messiah",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Messiah/Cst_Messiah_Const/SK_Cst_Messiah_Const_LOD0.SK_Cst_Messiah_Const_LOD0",
+          "mesh_name": "SK_Cst_Messiah_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Messiah/Cst_Messiah_Const_1/SK_Cst_Messiah_Const_1_LOD0.SK_Cst_Messiah_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Messiah_Const_1_LOD0"
+        },
+        {
+          "name": "Const_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Messiah/Cst_Messiah_Const_2/SK_Cst_Messiah_Const_2_LOD0.SK_Cst_Messiah_Const_2_LOD0",
+          "mesh_name": "SK_Cst_Messiah_Const_2_LOD0"
+        },
+        {
+          "name": "Const_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Messiah/Cst_Messiah_Const_Harmony_Untattooed/SK_Cst_Messiah_Const_Harmony_Untattooed_LOD0.SK_Cst_Messiah_Const_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_Messiah_Const_Harmony_Untattooed_LOD0"
+        },
+        {
+          "name": "Const_Harmony_Untattooed_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Messiah/Cst_Messiah_Const_Harmony_Untattooed_1/SK_Cst_Messiah_Const_Harmony_Untattooed_1_LOD0.SK_Cst_Messiah_Const_Harmony_Untattooed_1_LOD0",
+          "mesh_name": "SK_Cst_Messiah_Const_Harmony_Untattooed_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Mia",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Mia/Cst_Mia_Light/SK_Cst_Mia_Light_LOD0.SK_Cst_Mia_Light_LOD0",
+          "mesh_name": "SK_Cst_Mia_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Mio",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Mio/Cst_Mio_Light/SK_Cst_Mio_Light_LOD0.SK_Cst_Mio_Light_LOD0",
+          "mesh_name": "SK_Cst_Mio_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nagalan",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nagalan/Cst_Nagalan_Hollow/SK_Cst_Nagalan_Hollow_LOD0.SK_Cst_Nagalan_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Nagalan_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nagalan/Cst_Nagalan_Hollow_1/SK_Cst_Nagalan_Hollow_1_LOD0.SK_Cst_Nagalan_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Nagalan_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nahor",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nahor/Cst_Nahor_Odd/SK_Cst_Nahor_Odd_LOD0.SK_Cst_Nahor_Odd_LOD0",
+          "mesh_name": "SK_Cst_Nahor_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nahor/Cst_Nahor_Odd_1/SK_Cst_Nahor_Odd_1_LOD0.SK_Cst_Nahor_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Nahor_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_NahorBOSS",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NahorBOSS/Cst_NahorBOSS_Odd/SK_Cst_NahorBOSS_Odd_LOD0.SK_Cst_NahorBOSS_Odd_LOD0",
+          "mesh_name": "SK_Cst_NahorBOSS_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nell",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nell/Cst_Nell_Const/SK_Cst_Nell_Const_LOD0.SK_Cst_Nell_Const_LOD0",
+          "mesh_name": "SK_Cst_Nell_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nell/Cst_Nell_Hollow/SK_Cst_Nell_Hollow_LOD0.SK_Cst_Nell_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Nell_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nevitel",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nevitel/Cst_Nevitel_Odd/SK_Cst_Nevitel_Odd_LOD0.SK_Cst_Nevitel_Odd_LOD0",
+          "mesh_name": "SK_Cst_Nevitel_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nevitel/Cst_Nevitel_Odd_1/SK_Cst_Nevitel_Odd_1_LOD0.SK_Cst_Nevitel_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Nevitel_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nicolette",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nicolette/Cst_Nicolette_Const/SK_Cst_Nicolette_Const_LOD0.SK_Cst_Nicolette_Const_LOD0",
+          "mesh_name": "SK_Cst_Nicolette_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_NicoletteWolf",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoletteWolf/Cst_NicoletteWolf_Const/SK_Cst_NicoletteWolf_Const_LOD0.SK_Cst_NicoletteWolf_Const_LOD0",
+          "mesh_name": "SK_Cst_NicoletteWolf_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoletteWolf/Cst_NicoletteWolf_Disor/SK_Cst_NicoletteWolf_Disor_LOD0.SK_Cst_NicoletteWolf_Disor_LOD0",
+          "mesh_name": "SK_Cst_NicoletteWolf_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoletteWolf/Cst_NicoletteWolf_Hollow/SK_Cst_NicoletteWolf_Hollow_LOD0.SK_Cst_NicoletteWolf_Hollow_LOD0",
+          "mesh_name": "SK_Cst_NicoletteWolf_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoletteWolf/Cst_NicoletteWolf_Light/SK_Cst_NicoletteWolf_Light_LOD0.SK_Cst_NicoletteWolf_Light_LOD0",
+          "mesh_name": "SK_Cst_NicoletteWolf_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoletteWolf/Cst_NicoletteWolf_Odd/SK_Cst_NicoletteWolf_Odd_LOD0.SK_Cst_NicoletteWolf_Odd_LOD0",
+          "mesh_name": "SK_Cst_NicoletteWolf_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_NicoNana",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NicoNana/Cst_NicoNana_Light/SK_Cst_NicoNana_Light_LOD0.SK_Cst_NicoNana_Light_LOD0",
+          "mesh_name": "SK_Cst_NicoNana_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Nightmare",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Nightmare/Cst_Nightmare_Disor/SK_Cst_Nightmare_Disor_LOD0.SK_Cst_Nightmare_Disor_LOD0",
+          "mesh_name": "SK_Cst_Nightmare_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_NineTailedFox",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NineTailedFox/Cst_NineTailedFox_Odd/SK_Cst_NineTailedFox_Odd_LOD0.SK_Cst_NineTailedFox_Odd_LOD0",
+          "mesh_name": "SK_Cst_NineTailedFox_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NineTailedFox/Cst_NineTailedFox_Odd_1/SK_Cst_NineTailedFox_Odd_1_LOD0.SK_Cst_NineTailedFox_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_NineTailedFox_Odd_1_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NineTailedFox/Cst_NineTailedFox_Odd_Harmony_Untattooed/SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_LOD0.SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Untattooed_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_NineTailedFox/Cst_NineTailedFox_Odd_Harmony_Untattooed_1/SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_1_LOD0.SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_1_LOD0",
+          "mesh_name": "SK_Cst_NineTailedFox_Odd_Harmony_Untattooed_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Ninfoniel",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ninfoniel/Cst_Ninfoniel_Odd/SK_Cst_Ninfoniel_Odd_LOD0.SK_Cst_Ninfoniel_Odd_LOD0",
+          "mesh_name": "SK_Cst_Ninfoniel_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ninfoniel/Cst_Ninfoniel_Odd_1/SK_Cst_Ninfoniel_Odd_1_LOD0.SK_Cst_Ninfoniel_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Ninfoniel_Odd_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Oboro",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Oboro/Cst_Oboro_Odd/SK_Cst_Oboro_Odd_LOD0.SK_Cst_Oboro_Odd_LOD0",
+          "mesh_name": "SK_Cst_Oboro_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Opal",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Opal/Cst_Opal_Const/SK_Cst_Opal_Const_LOD0.SK_Cst_Opal_Const_LOD0",
+          "mesh_name": "SK_Cst_Opal_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_OrangutanDoll",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_OrangutanDoll/Cst_OrangutanDoll_Light/SK_Cst_OrangutanDoll_Light_LOD0.SK_Cst_OrangutanDoll_Light_LOD0",
+          "mesh_name": "SK_Cst_OrangutanDoll_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Orias",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Orias/Cst_Orias_Disor/SK_Cst_Orias_Disor_LOD0.SK_Cst_Orias_Disor_LOD0",
+          "mesh_name": "SK_Cst_Orias_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Osar",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Osar/Cst_Osar_Hollow/SK_Cst_Osar_Hollow_LOD0.SK_Cst_Osar_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Osar_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Osar/Cst_Osar_Hollow_1/SK_Cst_Osar_Hollow_1_LOD0.SK_Cst_Osar_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Osar_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_PaperCrane",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_PaperCrane/Cst_PaperCrane_Hollow/SK_Cst_PaperCrane_Hollow_LOD0.SK_Cst_PaperCrane_Hollow_LOD0",
+          "mesh_name": "SK_Cst_PaperCrane_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_PaperDoll",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_PaperDoll/Cst_PaperDoll_Hollow/SK_Cst_PaperDoll_Hollow_LOD0.SK_Cst_PaperDoll_Hollow_LOD0",
+          "mesh_name": "SK_Cst_PaperDoll_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Perseverance",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Perseverance/Cst_Perseverance_Hollow/SK_Cst_Perseverance_Hollow_LOD0.SK_Cst_Perseverance_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Perseverance_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Pierna",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Pierna/Cst_Pierna_Light/SK_Cst_Pierna_Light_LOD0.SK_Cst_Pierna_Light_LOD0",
+          "mesh_name": "SK_Cst_Pierna_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Plume",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Plume/Cst_Plume_Hollow/SK_Cst_Plume_Hollow_LOD0.SK_Cst_Plume_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Plume_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Plume/Cst_Plume_Hollow_1/SK_Cst_Plume_Hollow_1_LOD0.SK_Cst_Plume_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Plume_Hollow_1_LOD0"
+        },
+        {
+          "name": "Hollow_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Plume/Cst_Plume_Hollow_2/SK_Cst_Plume_Hollow_2_LOD0.SK_Cst_Plume_Hollow_2_LOD0",
+          "mesh_name": "SK_Cst_Plume_Hollow_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Prisoner",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Prisoner/Cst_Prisoner_Odd/SK_Cst_Prisoner_Odd_LOD0.SK_Cst_Prisoner_Odd_LOD0",
+          "mesh_name": "SK_Cst_Prisoner_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_PureUpgrade",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_PureUpgrade/Cst_PureUpgrade_Odd/SK_Cst_PureUpgrade_Odd_LOD0.SK_Cst_PureUpgrade_Odd_LOD0",
+          "mesh_name": "SK_Cst_PureUpgrade_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Pyxis",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Pyxis/Cst_Pyxis_Const/SK_Cst_Pyxis_Const_LOD0.SK_Cst_Pyxis_Const_LOD0",
+          "mesh_name": "SK_Cst_Pyxis_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Pyxis/Cst_Pyxis_Const_1/SK_Cst_Pyxis_Const_1_LOD0.SK_Cst_Pyxis_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Pyxis_Const_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Qianyu",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Qianyu/Cst_Qianyu_Const/SK_Cst_Qianyu_Const_LOD0.SK_Cst_Qianyu_Const_LOD0",
+          "mesh_name": "SK_Cst_Qianyu_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Qianyu/Cst_Qianyu_Const_1/SK_Cst_Qianyu_Const_1_LOD0.SK_Cst_Qianyu_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Qianyu_Const_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Raymerry",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Raymerry/Cst_Raymerry_Disor/SK_Cst_Raymerry_Disor_LOD0.SK_Cst_Raymerry_Disor_LOD0",
+          "mesh_name": "SK_Cst_Raymerry_Disor_LOD0"
+        },
+        {
+          "name": "Disor_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Raymerry/Cst_Raymerry_Disor_1/SK_Cst_Raymerry_Disor_1_LOD0.SK_Cst_Raymerry_Disor_1_LOD0",
+          "mesh_name": "SK_Cst_Raymerry_Disor_1_LOD0"
+        },
+        {
+          "name": "Disor_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Raymerry/Cst_Raymerry_Disor_Harmony_Top/SK_Cst_Raymerry_Disor_Harmony_Top_LOD0.SK_Cst_Raymerry_Disor_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Raymerry_Disor_Harmony_Top_LOD0"
+        },
+        {
+          "name": "Disor_Harmony_Top_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Raymerry/Cst_Raymerry_Disor_Harmony_Top_1/SK_Cst_Raymerry_Disor_Harmony_Top_1_LOD0.SK_Cst_Raymerry_Disor_Harmony_Top_1_LOD0",
+          "mesh_name": "SK_Cst_Raymerry_Disor_Harmony_Top_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_RC77",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_RC77/Cst_RC77_Odd/SK_Cst_RC77_Odd_LOD0.SK_Cst_RC77_Odd_LOD0",
+          "mesh_name": "SK_Cst_RC77_Odd_LOD0"
+        },
+        {
+          "name": "Water",
+          "rel_path": "ArtResources/Characters/Cst/Cst_RC77/Cst_RC77_Odd/SK_Cst_RC77_Water_LOD0.SK_Cst_RC77_Water_LOD0",
+          "mesh_name": "SK_Cst_RC77_Water_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Rengokutsu",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rengokutsu/Cst_Rengokutsu_Odd/SK_Cst_Rengokutsu_Odd_LOD0.SK_Cst_Rengokutsu_Odd_LOD0",
+          "mesh_name": "SK_Cst_Rengokutsu_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Rilmocha",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rilmocha/Cst_Rilmocha_Hollow/SK_Cst_Rilmocha_Hollow_LOD0.SK_Cst_Rilmocha_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Rilmocha_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rilmocha/Cst_Rilmocha_Hollow_1/SK_Cst_Rilmocha_Hollow_1_LOD0.SK_Cst_Rilmocha_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Rilmocha_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Rosa",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rosa/Cst_Rosa_Odd/SK_Cst_Rosa_Odd_LOD0.SK_Cst_Rosa_Odd_LOD0",
+          "mesh_name": "SK_Cst_Rosa_Odd_LOD0"
+        },
+        {
+          "name": "Odd_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rosa/Cst_Rosa_Odd_1/SK_Cst_Rosa_Odd_1_LOD0.SK_Cst_Rosa_Odd_1_LOD0",
+          "mesh_name": "SK_Cst_Rosa_Odd_1_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rosa/Cst_Rosa_Odd_Harmony_Top/SK_Cst_Rosa_Odd_Harmony_Top_LOD0.SK_Cst_Rosa_Odd_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Rosa_Odd_Harmony_Top_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Top_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Rosa/Cst_Rosa_Odd_Harmony_Top_1/SK_Cst_Rosa_Odd_Harmony_Top_1_LOD0.SK_Cst_Rosa_Odd_Harmony_Top_1_LOD0",
+          "mesh_name": "SK_Cst_Rosa_Odd_Harmony_Top_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Ruho",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ruho/Cst_Ruho_Odd/SK_Cst_Ruho_Odd_LOD0.SK_Cst_Ruho_Odd_LOD0",
+          "mesh_name": "SK_Cst_Ruho_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Ruwoon",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ruwoon/Cst_Ruwoon_Hollow/SK_Cst_Ruwoon_Hollow_LOD0.SK_Cst_Ruwoon_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Ruwoon_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ruwoon/Cst_Ruwoon_Hollow_1/SK_Cst_Ruwoon_Hollow_1_LOD0.SK_Cst_Ruwoon_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Ruwoon_Hollow_1_LOD0"
+        },
+        {
+          "name": "Hollow_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Ruwoon/Cst_Ruwoon_Hollow_2/SK_Cst_Ruwoon_Hollow_2_LOD0.SK_Cst_Ruwoon_Hollow_2_LOD0",
+          "mesh_name": "SK_Cst_Ruwoon_Hollow_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Selone",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Selone/Cst_Selone_Const/SK_Cst_Selone_Const_LOD0.SK_Cst_Selone_Const_LOD0",
+          "mesh_name": "SK_Cst_Selone_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Selone/Cst_Selone_Disor/SK_Cst_Selone_Disor_LOD0.SK_Cst_Selone_Disor_LOD0",
+          "mesh_name": "SK_Cst_Selone_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Selone/Cst_Selone_Hollow/SK_Cst_Selone_Hollow_LOD0.SK_Cst_Selone_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Selone_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Selone/Cst_Selone_Light/SK_Cst_Selone_Light_LOD0.SK_Cst_Selone_Light_LOD0",
+          "mesh_name": "SK_Cst_Selone_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Selone/Cst_Selone_Odd/SK_Cst_Selone_Odd_LOD0.SK_Cst_Selone_Odd_LOD0",
+          "mesh_name": "SK_Cst_Selone_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Shadowflame",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Shadowflame/Cst_Shadowflame_Disor/SK_Cst_Shadowflame_Disor_LOD0.SK_Cst_Shadowflame_Disor_LOD0",
+          "mesh_name": "SK_Cst_Shadowflame_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_ShadowHunter",
+      "type": "Cst",
+      "variant_count": 4,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ShadowHunter/Cst_ShadowHunter_Const/SK_Cst_ShadowHunter_Const_LOD0.SK_Cst_ShadowHunter_Const_LOD0",
+          "mesh_name": "SK_Cst_ShadowHunter_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ShadowHunter/Cst_ShadowHunter_Const_1/SK_Cst_ShadowHunter_Const_1_LOD0.SK_Cst_ShadowHunter_Const_1_LOD0",
+          "mesh_name": "SK_Cst_ShadowHunter_Const_1_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ShadowHunter/Cst_ShadowHunter_Disor/SK_Cst_ShadowHunter_Disor_LOD0.SK_Cst_ShadowHunter_Disor_LOD0",
+          "mesh_name": "SK_Cst_ShadowHunter_Disor_LOD0"
+        },
+        {
+          "name": "Disor_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ShadowHunter/Cst_ShadowHunter_Disor_Harmony_Untattooed/SK_Cst_ShadowHunter_Disor_Harmony_Untattooed_LOD0.SK_Cst_ShadowHunter_Disor_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_ShadowHunter_Disor_Harmony_Untattooed_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Shanya",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Shanya/Cst_Shanya_Const/SK_Cst_Shanya_Const_LOD0.SK_Cst_Shanya_Const_LOD0",
+          "mesh_name": "SK_Cst_Shanya_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Shanya/Cst_Shanya_Disor/SK_Cst_Shanya_Disor_LOD0.SK_Cst_Shanya_Disor_LOD0",
+          "mesh_name": "SK_Cst_Shanya_Disor_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Sharon",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Sharon/Cst_Sharon_Hollow/SK_Cst_Sharon_Hollow_LOD0.SK_Cst_Sharon_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Sharon_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_SharonHero",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_SharonHero/Cst_SharonHero_Disor/SK_Cst_SharonHero_Disor_LOD0.SK_Cst_SharonHero_Disor_LOD0",
+          "mesh_name": "SK_Cst_SharonHero_Disor_LOD0"
+        },
+        {
+          "name": "Disor_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_SharonHero/Cst_SharonHero_Disor_1/SK_Cst_SharonHero_Disor_1_LOD0.SK_Cst_SharonHero_Disor_1_LOD0",
+          "mesh_name": "SK_Cst_SharonHero_Disor_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Shears",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Shears/Cst_Shears_Hollow/SK_Cst_Shears_Hollow_LOD0.SK_Cst_Shears_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Shears_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Shears/Cst_Shears_Light/SK_Cst_Shears_Light_LOD0.SK_Cst_Shears_Light_LOD0",
+          "mesh_name": "SK_Cst_Shears_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Silvia",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Silvia/Cst_Silvia_Light/SK_Cst_Silvia_Light_LOD0.SK_Cst_Silvia_Light_LOD0",
+          "mesh_name": "SK_Cst_Silvia_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Silvia/Cst_Silvia_Light_1/SK_Cst_Silvia_Light_1_LOD0.SK_Cst_Silvia_Light_1_LOD0",
+          "mesh_name": "SK_Cst_Silvia_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Snake",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Snake/Cst_Snake_Hollow/SK_Cst_Snake_Hollow_LOD0.SK_Cst_Snake_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Snake_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Sol",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Sol/Cst_Sol_Light/SK_Cst_Sol_Light_LOD0.SK_Cst_Sol_Light_LOD0",
+          "mesh_name": "SK_Cst_Sol_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_StarTracer",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_StarTracer/Cst_StarTracer_Const/SK_Cst_StarTracer_Const_LOD0.SK_Cst_StarTracer_Const_LOD0",
+          "mesh_name": "SK_Cst_StarTracer_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_SunTyke",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_SunTyke/Cst_SunTyke_Light/SK_Cst_SunTyke_Light_LOD0.SK_Cst_SunTyke_Light_LOD0",
+          "mesh_name": "SK_Cst_SunTyke_Light_LOD0"
+        },
+        {
+          "name": "Light_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_SunTyke/Cst_SunTyke_Light_1/SK_Cst_SunTyke_Light_1_LOD0.SK_Cst_SunTyke_Light_1_LOD0",
+          "mesh_name": "SK_Cst_SunTyke_Light_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_SweetDream",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_SweetDream/Cst_SweetDream_Const/SK_Cst_SweetDream_Const_LOD0.SK_Cst_SweetDream_Const_LOD0",
+          "mesh_name": "SK_Cst_SweetDream_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Sybil",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Sybil/Cst_Sybil_Odd/SK_Cst_Sybil_Odd_LOD0.SK_Cst_Sybil_Odd_LOD0",
+          "mesh_name": "SK_Cst_Sybil_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Sylph",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Sylph/Cst_Sylph_Hollow/SK_Cst_Sylph_Hollow_LOD0.SK_Cst_Sylph_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Sylph_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Tailspin",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Tailspin/Cst_Tailspin_Odd/SK_Cst_Tailspin_Odd_LOD0.SK_Cst_Tailspin_Odd_LOD0",
+          "mesh_name": "SK_Cst_Tailspin_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Thug",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thug/Cst_Thug_Const/SK_Cst_Thug_Const_LOD0.SK_Cst_Thug_Const_LOD0",
+          "mesh_name": "SK_Cst_Thug_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thug/Cst_Thug_Disor/SK_Cst_Thug_Disor_LOD0.SK_Cst_Thug_Disor_LOD0",
+          "mesh_name": "SK_Cst_Thug_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thug/Cst_Thug_Hollow/SK_Cst_Thug_Hollow_LOD0.SK_Cst_Thug_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Thug_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Thunderbolt",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "dragon",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thunderbolt/Dragon/dragon.dragon",
+          "mesh_name": "dragon"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thunderbolt/Cst_Thunderbolt_Hollow/SK_Cst_Thunderbolt_Hollow_LOD0.SK_Cst_Thunderbolt_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Thunderbolt_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Thunderbolt/Cst_Thunderbolt_Hollow_1/SK_Cst_Thunderbolt_Hollow_1_LOD0.SK_Cst_Thunderbolt_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Thunderbolt_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Tiamat",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Tiamat/Cst_Tiamat_Hollow/SK_Cst_Tiamat_Hollow_LOD0.SK_Cst_Tiamat_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Tiamat_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Tiamat/Cst_Tiamat_Hollow_1/SK_Cst_Tiamat_Hollow_1_LOD0.SK_Cst_Tiamat_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Tiamat_Hollow_1_LOD0"
+        },
+        {
+          "name": "Hollow_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Tiamat/Cst_Tiamat_Hollow_2/SK_Cst_Tiamat_Hollow_2_LOD0.SK_Cst_Tiamat_Hollow_2_LOD0",
+          "mesh_name": "SK_Cst_Tiamat_Hollow_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_TiamatMorph",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TiamatMorph/Cst_TiamatMorph_Hollow/SK_Cst_TiamatMorph_Hollow_LOD0.SK_Cst_TiamatMorph_Hollow_LOD0",
+          "mesh_name": "SK_Cst_TiamatMorph_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TiamatMorph/Cst_TiamatMorph_Hollow_2/SK_Cst_TiamatMorph_Hollow_2_LOD0.SK_Cst_TiamatMorph_Hollow_2_LOD0",
+          "mesh_name": "SK_Cst_TiamatMorph_Hollow_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_TimeReaper",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TimeReaper/Cst_TimeReaper_Disor/SK_Cst_TimeReaper_Disor_LOD0.SK_Cst_TimeReaper_Disor_LOD0",
+          "mesh_name": "SK_Cst_TimeReaper_Disor_LOD0"
+        },
+        {
+          "name": "Disor_WithoutBag",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TimeReaper/Cst_TimeReaper_Disor/CharWithoutBag/SK_Cst_TimeReaper_Disor_WithoutBag_LOD0.SK_Cst_TimeReaper_Disor_WithoutBag_LOD0",
+          "mesh_name": "SK_Cst_TimeReaper_Disor_WithoutBag_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_TrainConductorState2",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TrainConductorState2/Cst_TrainConductorState2_Odd/SK_Cst_TrainConductorState2_Odd_LOD0.SK_Cst_TrainConductorState2_Odd_LOD0",
+          "mesh_name": "SK_Cst_TrainConductorState2_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Triggerman",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Triggerman/Cst_Triggerman_Hollow/SK_Cst_Triggerman_Hollow_LOD0.SK_Cst_Triggerman_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Triggerman_Hollow_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_TsukiyoMi",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_TsukiyoMi/Cst_TsukiyoMi_Odd/SK_Cst_TsukiyoMi_Odd_LOD0.SK_Cst_TsukiyoMi_Odd_LOD0",
+          "mesh_name": "SK_Cst_TsukiyoMi_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Valerian",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Valerian/Cst_Valerian_Hollow/SK_Cst_Valerian_Hollow_LOD0.SK_Cst_Valerian_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Valerian_Hollow_LOD0"
+        },
+        {
+          "name": "Hollow_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Valerian/Cst_Valerian_Hollow_1/SK_Cst_Valerian_Hollow_1_LOD0.SK_Cst_Valerian_Hollow_1_LOD0",
+          "mesh_name": "SK_Cst_Valerian_Hollow_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Valkyrie",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Valkyrie/Cst_Valkyrie_Light/SK_Cst_Valkyrie_Light_LOD0.SK_Cst_Valkyrie_Light_LOD0",
+          "mesh_name": "SK_Cst_Valkyrie_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_ValkyrieLeftHand",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ValkyrieLeftHand/Cst_ValkyrieLeftHand_Light/SK_Cst_ValkyrieLeftHand_Light_LOD0.SK_Cst_ValkyrieLeftHand_Light_LOD0",
+          "mesh_name": "SK_Cst_ValkyrieLeftHand_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_ValkyrieRightHand",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_ValkyrieRightHand/Cst_ValkyrieRightHand_Light/SK_Cst_ValkyrieRightHand_Light_LOD0.SK_Cst_ValkyrieRightHand_Light_LOD0",
+          "mesh_name": "SK_Cst_ValkyrieRightHand_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Veronika",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Veronika/Cst_Veronika_Light/SK_Cst_Veronika_Light_LOD0.SK_Cst_Veronika_Light_LOD0",
+          "mesh_name": "SK_Cst_Veronika_Light_LOD0"
+        },
+        {
+          "name": "Light_Harmony_Top",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Veronika/Cst_Veronika_Light_Harmony_Top/SK_Cst_Veronika_Light_Harmony_Top_LOD0.SK_Cst_Veronika_Light_Harmony_Top_LOD0",
+          "mesh_name": "SK_Cst_Veronika_Light_Harmony_Top_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Vespera",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Vespera/Cst_Vespera_Hollow/SK_Cst_Vespera_Hollow_LOD0.SK_Cst_Vespera_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Vespera_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Vespera/Cst_Vespera_Light/SK_Cst_Vespera_Light_LOD0.SK_Cst_Vespera_Light_LOD0",
+          "mesh_name": "SK_Cst_Vespera_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Vespera/Cst_Vespera_Odd/SK_Cst_Vespera_Odd_LOD0.SK_Cst_Vespera_Odd_LOD0",
+          "mesh_name": "SK_Cst_Vespera_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_VesperaMonster",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_VesperaMonster/Cst_VesperaMonster_Hollow/SK_Cst_VesperaMonster_Hollow_LOD0.SK_Cst_VesperaMonster_Hollow_LOD0",
+          "mesh_name": "SK_Cst_VesperaMonster_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_VesperaMonster/Cst_VesperaMonster_Light/SK_Cst_VesperaMonster_Light_LOD0.SK_Cst_VesperaMonster_Light_LOD0",
+          "mesh_name": "SK_Cst_VesperaMonster_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_VesperaMonster/Cst_VesperaMonster_Odd/SK_Cst_VesperaMonster_Odd_LOD0.SK_Cst_VesperaMonster_Odd_LOD0",
+          "mesh_name": "SK_Cst_VesperaMonster_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Viper",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Viper/Cst_Viper_Odd/SK_Cst_Viper_Odd_LOD0.SK_Cst_Viper_Odd_LOD0",
+          "mesh_name": "SK_Cst_Viper_Odd_LOD0"
+        },
+        {
+          "name": "Odd_Harmony_Untattooed",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Viper/Cst_Viper_Odd_Harmony_Untattooed/SK_Cst_Viper_Odd_Harmony_Untattooed_LOD0.SK_Cst_Viper_Odd_Harmony_Untattooed_LOD0",
+          "mesh_name": "SK_Cst_Viper_Odd_Harmony_Untattooed_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Waiter",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Waiter/Cst_Waiter_Const/SK_Cst_Waiter_Const_LOD0.SK_Cst_Waiter_Const_LOD0",
+          "mesh_name": "SK_Cst_Waiter_Const_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Waiter/Cst_Waiter_Hollow/SK_Cst_Waiter_Hollow_LOD0.SK_Cst_Waiter_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Waiter_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Waiter/Cst_Waiter_Light/SK_Cst_Waiter_Light_LOD0.SK_Cst_Waiter_Light_LOD0",
+          "mesh_name": "SK_Cst_Waiter_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_WaiterManager",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_WaiterManager/Cst_WaiterManager_Light/SK_Cst_WaiterManager_Light_LOD0.SK_Cst_WaiterManager_Light_LOD0",
+          "mesh_name": "SK_Cst_WaiterManager_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Waitress",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Waitress/Cst_Waitress_Hollow/SK_Cst_Waitress_Hollow_LOD0.SK_Cst_Waitress_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Waitress_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Waitress/Cst_Waitress_Light/SK_Cst_Waitress_Light_LOD0.SK_Cst_Waitress_Light_LOD0",
+          "mesh_name": "SK_Cst_Waitress_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Whitney",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Whitney/Cst_Whitney_Light/SK_Cst_Whitney_Light_LOD0.SK_Cst_Whitney_Light_LOD0",
+          "mesh_name": "SK_Cst_Whitney_Light_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Worm",
+      "type": "Cst",
+      "variant_count": 5,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Worm/Cst_Worm_Const/SK_Cst_Worm_Const_LOD0.SK_Cst_Worm_Const_LOD0",
+          "mesh_name": "SK_Cst_Worm_Const_LOD0"
+        },
+        {
+          "name": "Disor",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Worm/Cst_Worm_Disor/SK_Cst_Worm_Disor_LOD0.SK_Cst_Worm_Disor_LOD0",
+          "mesh_name": "SK_Cst_Worm_Disor_LOD0"
+        },
+        {
+          "name": "Hollow",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Worm/Cst_Worm_Hollow/SK_Cst_Worm_Hollow_LOD0.SK_Cst_Worm_Hollow_LOD0",
+          "mesh_name": "SK_Cst_Worm_Hollow_LOD0"
+        },
+        {
+          "name": "Light",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Worm/Cst_Worm_Light/SK_Cst_Worm_Light_LOD0.SK_Cst_Worm_Light_LOD0",
+          "mesh_name": "SK_Cst_Worm_Light_LOD0"
+        },
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Worm/Cst_Worm_Odd/SK_Cst_Worm_Odd_LOD0.SK_Cst_Worm_Odd_LOD0",
+          "mesh_name": "SK_Cst_Worm_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Xuanli",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Xuanli/Cst_Xuanli_Const/SK_Cst_Xuanli_Const_LOD0.SK_Cst_Xuanli_Const_LOD0",
+          "mesh_name": "SK_Cst_Xuanli_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Xuanli/Cst_Xuanli_Const_1/SK_Cst_Xuanli_Const_1_LOD0.SK_Cst_Xuanli_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Xuanli_Const_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Xuanqi",
+      "type": "Cst",
+      "variant_count": 2,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Xuanqi/Cst_Xuanqi_Const/SK_Cst_Xuanqi_Const_LOD0.SK_Cst_Xuanqi_Const_LOD0",
+          "mesh_name": "SK_Cst_Xuanqi_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Xuanqi/Cst_Xuanqi_Const_1/SK_Cst_Xuanqi_Const_1_LOD0.SK_Cst_Xuanqi_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Xuanqi_Const_1_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Yang",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Odd",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Yang/Cst_Yang_Odd/SK_Cst_Yang_Odd_LOD0.SK_Cst_Yang_Odd_LOD0",
+          "mesh_name": "SK_Cst_Yang_Odd_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Yao",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "AS_Cst_Yao_Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Yao/Cst_Yao_Const/AS_Cst_Yao_Const_LOD0.AS_Cst_Yao_Const_LOD0",
+          "mesh_name": "AS_Cst_Yao_Const_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_Yeli",
+      "type": "Cst",
+      "variant_count": 3,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Yeli/Cst_Yeli_Const/SK_Cst_Yeli_Const_LOD0.SK_Cst_Yeli_Const_LOD0",
+          "mesh_name": "SK_Cst_Yeli_Const_LOD0"
+        },
+        {
+          "name": "Const_1",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Yeli/Cst_Yeli_Const_1/SK_Cst_Yeli_Const_1_LOD0.SK_Cst_Yeli_Const_1_LOD0",
+          "mesh_name": "SK_Cst_Yeli_Const_1_LOD0"
+        },
+        {
+          "name": "Const_2",
+          "rel_path": "ArtResources/Characters/Cst/Cst_Yeli/Cst_Yeli_Const_2/SK_Cst_Yeli_Const_2_LOD0.SK_Cst_Yeli_Const_2_LOD0",
+          "mesh_name": "SK_Cst_Yeli_Const_2_LOD0"
+        }
+      ]
+    },
+    {
+      "role_id": "Cst_YeliBOSS",
+      "type": "Cst",
+      "variant_count": 1,
+      "variants": [
+        {
+          "name": "Const",
+          "rel_path": "ArtResources/Characters/Cst/Cst_YeliBOSS/Cst_YeliBOSS_Const/SK_Cst_YeliBOSS_Const_LOD0.SK_Cst_YeliBOSS_Const_LOD0",
+          "mesh_name": "SK_Cst_YeliBOSS_Const_LOD0"
+        }
+      ]
+    }
+  ]
+}
