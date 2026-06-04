@@ -1,12 +1,19 @@
-"""UE 灯光对照渲染：同一角色，5 组不同灯光参数 → 5 张 front 图。
+"""阶段 0 诊断：base vs final color 参数对比网格（多角色 × 多档方案）。
 
-使用方法：
-1. UE 已启动并加载好项目
-2. Tools → Run Python Script → 选本文件
-3. 跑完会打开 D:/ref_shots/light_test/，里面 5 张图分别叫 A/B/C/D/E
-4. 你看哪张最好，告诉我字母，我就把这组参数写回 02/03
+目的：eden 现在编辑器能正常打开了，重新验证当年"final color 糊白 / EV 失效"的结论，
+为 03_batch 回归 final color 真实渲染定基准参数。
 
-每组参数都列在下面 PRESETS 里，可读可改。
+跑法（交互编辑器）：
+1. open_editor.bat 打开 eden 编辑器 → 等完全加载 → 在左上 3D 视口点一下激活它。
+2. Window → Developer Tools → Output Log，命令框输入：
+   py "D:\\code\\ue_scripts_eth_ue4\\01_setup.py"      （只需第一次，建关卡/灯/相机）
+   py "D:\\code\\ue_scripts_eth_ue4\\02b_light_test.py"
+3. 跑完自动打开 OUTPUT_DIR，看 grid.png：
+   - 行 = 6 个代表角色；列 = base 对照 / final 多档 EV / final 低灯 / Agt 发光档。
+   - 重点看：final 是否糊白、EV 调高画面是否变化(EV 是否生效)、emissive 红角/眼睛/皮肤/NPR 描边是否随 final 出现。
+4. 把结论告诉我（哪列最接近游戏内、EV 生不生效），我据此定 03 的 final preset。
+
+每张只截 front 一个视角（诊断够用）。黑底 RGB（诊断看色，不做透明）。
 """
 import unreal
 import os
@@ -15,60 +22,38 @@ import subprocess
 
 # ============ 配置 ============
 EXTERNAL_PYTHON = r"C:/Users/XINDONG/AppData/Local/Programs/Python/Python312/python.exe"
-OUTPUT_DIR    = r"D:/角色识别数据/伊瑟_UE4_light_test"
+OUTPUT_DIR    = r"D:/角色识别数据/伊瑟_UE4_skintest"
 RESOLUTION    = (1024, 2304)
 LEVEL_PATH    = "/Game/Maps/L_CharRefShoot"
-TEST_CHARACTER = "Alicorn"          # Agt 探子（final+发光，扫灯光强度对齐原图）
-MESH_REQUIRE_PATH = ""
-SEARCH_DIRS    = ["/Game/ArtResources/Characters/Agt"]
-FILL_RATIO    = 0.80
+WARMUP        = 3   # 每张正式截图前空跑几次，驱动贴图/shader 就绪，防黑剪影/棋盘格
 
-
-def find_test_mesh():
-    aal = unreal.EditorAssetLibrary
-    for d in SEARCH_DIRS:
-        try:
-            paths = aal.list_assets(d, recursive=True, include_folder=False)
-        except Exception as e:
-            print(f"[light_test] list_assets fail {d}: {e}")
-            continue
-        for p in paths:
-            if TEST_CHARACTER not in p:
-                continue
-            if MESH_REQUIRE_PATH and MESH_REQUIRE_PATH not in p:
-                continue
-            data = aal.find_asset_data(p)
-            cname = None
-            try:
-                cname = str(data.asset_class_path.asset_name)
-            except Exception:
-                try:
-                    cname = str(data.asset_class)
-                except Exception:
-                    pass
-            if cname != "SkeletalMesh":
-                continue
-            return p
-    return None
-
-# 伊瑟 UE4 — Agt 灯光强度扫描：final-color(光照色，含发光) + ACES tonemapper(flatten=False，
-# 压高光防糊白)，扫 dir 强度。EV 本工程失效，只能靠灯光强度调亮。
-# 看 grid.png 挑一档「白甲够亮、红角发光、不糊白」最接近原图的，把那组 sky/dir 回填 03 的 agt preset。
-_L = dict(fill=0, rim=0, dir_pitch=-30, dir_yaw=-45, ev=0.0, sat=1.0, temp=6500,
-          capture="ldr", flatten=False)
-PRESETS = [
-    {**_L, "sky": 0,   "dir": 0,    "capture": "base", "name": "base_ref", "note": "base 对照"},
-    {**_L, "sky": 30,  "dir": 150,  "name": "d150",  "note": ""},
-    {**_L, "sky": 60,  "dir": 400,  "name": "d400",  "note": ""},
-    {**_L, "sky": 100, "dir": 800,  "name": "d800",  "note": ""},
-    {**_L, "sky": 160, "dir": 1400, "name": "d1400", "note": ""},
-    {**_L, "sky": 250, "dir": 2200, "name": "d2200", "note": ""},
+# 皮肤 sat 微调诊断：选用户反馈"太白"的浅肤角色 + 对照，扫 sat 找肤色不橙不白的甜点。
+# 关键：本脚本后处理已与 03 成品一致(反相alpha+反预乘+温和提亮+灰底96合成)，所见即所得。
+MESHES = [
+    ("Chr_AgentM",        "/Game/ArtResources/Characters/Chr/Chr_AgentM/SK_Chr_AgentM_LOD0"),                       # 对照(sat1.0 OK)
+    ("Chr_NPC_Aya",       "/Game/ArtResources/Characters/Chr/Chr_NPC_Aya/SK_Chr_NPC_Aya_LOD0"),                     # sat1.0 太白
+    ("Chr_Ed_Blackgold",  "/Game/ArtResources/Characters/Chr/Chr_Girl_Home_Eveningdress/Eveningdress_Blackgold/SK_Chr_Girl_Home_Ed_Blackgold_Lod0"),  # 太白
+    ("Cst_Nell",          "/Game/ArtResources/Characters/Cst/Cst_Nell/Cst_Nell_Const/SK_Cst_Nell_Const_LOD0"),      # 太白
+    ("Cst_Experimenter41","/Game/ArtResources/Characters/Cst/Cst_Experimenter41/Cst_Experimenter41_Hollow/SK_Cst_Experimenter41_Hollow_LOD0"),  # 太白
+    ("Chr_Sw_Blackpink",  "/Game/ArtResources/Characters/Chr/Chr_Girl_Home_Sw_Blackpink/Girl_Home_Sw_Blackpink/SK_Chr_Girl_Home_Sw_Blackpink_LOD0"),  # sat1.4 曾偏橙
 ]
+
+# 方案列：定稿基准(无灯 final + ACES + shoulder0.5)，只扫 sat。sat1.4→橙、sat1.0→白，找中间。
+_C = dict(fill=0, rim=0, dir_pitch=-30, dir_yaw=-45, sky=0, dir=0, ev=-1.0,
+          flatten=False, shoulder=0.5, capture="ldr", temp=6500)
+COLS = [
+    {**_C, "name": "sat10", "sat": 1.0},   # 太白
+    {**_C, "name": "sat11", "sat": 1.1},
+    {**_C, "name": "sat12", "sat": 1.2},
+    {**_C, "name": "sat13", "sat": 1.3},
+    {**_C, "name": "sat14", "sat": 1.4},   # 太橙
+]
+
 
 # ============ 工具 ============
 def log(m):
-    print(f"[light_test] {m}")
-    unreal.log(f"[light_test] {m}")
+    print(f"[diag] {m}")
+    unreal.log(f"[diag] {m}")
 
 
 def get_world():
@@ -76,7 +61,6 @@ def get_world():
 
 
 # ============ UE 版本兼容层（4.26 无 LevelEditorSubsystem/EditorActorSubsystem）============
-# 4.27+/5.x: 用对应 Subsystem；4.26: 回退 EditorLevelLibrary（level/actor 方法名一致）。
 def get_level_subsystem():
     cls = getattr(unreal, "LevelEditorSubsystem", None)
     if cls is not None:
@@ -109,21 +93,26 @@ def set_runtime_cvars():
     for c in ["r.PostProcessing.PropagateAlpha 2",
               "r.SceneColorFormat 4",
               "r.HighResScreenshotDelay 4",
-              "r.SetNearClipPlane 1"]:
+              "r.SetNearClipPlane 1",
+              # 防首帧黑剪影/棋盘格占位：强制贴图全量加载、关流式、同步编 shader
+              "r.Streaming.FullyLoadUsedTextures 1",
+              "r.Streaming.Boost 1",
+              "r.TextureStreaming 0",
+              "r.ShaderCompiler.AsyncCompiling 0"]:
         unreal.SystemLibrary.execute_console_command(w, c)
 
 
 def neutralize_ppv():
-    """01_setup 留下的 PPV_Shoot 把 min/max brightness 锁在 1.0，会盖掉
-    SceneCapture 自己的 ev override。这里把它的曝光 override 全关掉。"""
+    """01_setup 留的 PPV_Shoot 把 min/max brightness 锁 1.0，会盖掉 SceneCapture 的 ev override。
+    清掉它的曝光 override，否则 EV 调不动（这正是当年误判'EV 失效'的嫌疑点之一）。"""
     ppv = find_actor_by_label("PPV_Shoot")
     if ppv is None:
         return
     s = ppv.settings
     for k in ("override_auto_exposure_min_brightness",
-             "override_auto_exposure_max_brightness",
-             "override_auto_exposure_bias",
-             "override_auto_exposure_method"):
+              "override_auto_exposure_max_brightness",
+              "override_auto_exposure_bias",
+              "override_auto_exposure_method"):
         try:
             s.set_editor_property(k, False)
         except Exception:
@@ -131,8 +120,7 @@ def neutralize_ppv():
     log("PPV_Shoot exposure overrides cleared")
 
 
-def ensure_dir_light(intensity, pitch=-45.0, yaw=-30.0):
-    """确保 DirLight_Shoot 存在，设亮度 + 方向。pitch/yaw 每次都重写。"""
+def ensure_dir_light(intensity, pitch=-30.0, yaw=-45.0):
     eas = get_actor_subsystem()
     dl = find_actor_by_label("DirLight_Shoot")
     if dl is None:
@@ -162,44 +150,33 @@ def ensure_sky_light(intensity):
         pass
 
 
-def ensure_fill_light(intensity):
+def ensure_extra_light(label, intensity, pitch, yaw):
     eas = get_actor_subsystem()
-    f = find_actor_by_label("FillLight_Shoot")
-    if f is None:
-        f = eas.spawn_actor_from_class(unreal.DirectionalLight, unreal.Vector(0, 0, 500))
-        f.set_actor_label("FillLight_Shoot")
-        f.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=-20.0, yaw=150.0), False)
-    c = f.light_component
+    x = find_actor_by_label(label)
+    if x is None:
+        x = eas.spawn_actor_from_class(unreal.DirectionalLight, unreal.Vector(0, 0, 500))
+        x.set_actor_label(label)
+        x.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=float(pitch), yaw=float(yaw)), False)
+    c = x.light_component
     c.set_editor_property("intensity", float(intensity))
     c.set_editor_property("cast_shadows", False)
 
 
-def ensure_rim_light(intensity):
-    eas = get_actor_subsystem()
-    r = find_actor_by_label("RimLight_Shoot")
-    if r is None:
-        r = eas.spawn_actor_from_class(unreal.DirectionalLight, unreal.Vector(0, 0, 500))
-        r.set_actor_label("RimLight_Shoot")
-        r.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=-10.0, yaw=90.0), False)
-    c = r.light_component
-    c.set_editor_property("intensity", float(intensity))
-    c.set_editor_property("cast_shadows", False)
+def apply_lighting(col):
+    ensure_sky_light(col.get("sky", 0))
+    ensure_dir_light(col.get("dir", 0), col.get("dir_pitch", -30.0), col.get("dir_yaw", -45.0))
+    ensure_extra_light("FillLight_Shoot", col.get("fill", 0), -20.0, 150.0)
+    ensure_extra_light("RimLight_Shoot", col.get("rim", 0), -10.0, 90.0)
 
 
-def apply_preset(p):
-    ensure_sky_light(p["sky"])
-    ensure_dir_light(p["dir"], p.get("dir_pitch", -45.0), p.get("dir_yaw", -30.0))
-    ensure_fill_light(p["fill"])
-    ensure_rim_light(p["rim"])
-    log(f"applied {p['name']}: sky={p['sky']} dir={p['dir']}(p={p.get('dir_pitch',-45)},y={p.get('dir_yaw',-30)}) fill={p['fill']} rim={p['rim']} ev={p['ev']} sat={p.get('sat',1.0)} temp={p.get('temp',6500)}  ({p['note']})")
-
-
-FILL_RATIO_W = 0.62  # 水平占帧比例（< 竖直，左右多留 padding，防手臂/冰晶贴边）
+FILL_RATIO   = 0.80
+FILL_RATIO_W = 0.88
 
 
 def fit_camera(cam, actor):
+    # 诊断用整体包围盒（含武器/翅膀等远伸件），同时验证"缺件"是否回来
     origin, extent = actor.get_actor_bounds(only_colliding_components=False)
-    height = extent.z * 2
+    height = max(extent.z * 2, 50.0)
     width = max(extent.x, extent.y) * 2
     sensor_h = 13.365
     focal = cam.get_cine_camera_component().current_focal_length
@@ -211,8 +188,7 @@ def fit_camera(cam, actor):
     dist = max(dist_h, dist_w, 50.0)
     cam_loc = unreal.Vector(origin.x - dist, origin.y, origin.z)
     cam.set_actor_location(cam_loc, False, False)
-    look = unreal.MathLibrary.find_look_at_rotation(cam_loc, origin)
-    cam.set_actor_rotation(look, False)
+    cam.set_actor_rotation(unreal.MathLibrary.find_look_at_rotation(cam_loc, origin), False)
     cam.get_cine_camera_component().focus_settings.manual_focus_distance = dist
     return dist
 
@@ -245,7 +221,8 @@ def make_rt(w, h, world, rl):
     return None
 
 
-def shoot_one(actor, cam, preset, output_path):
+def shoot_one(actor, cam, col, output_path):
+    """对当前 actor（已 fit_camera）按一个 col 方案截 front 一张。"""
     w = get_world()
     cam_loc = cam.get_actor_location()
     cam_rot = cam.get_actor_rotation()
@@ -262,9 +239,8 @@ def shoot_one(actor, cam, preset, output_path):
         return
     rt = make_rt(RESOLUTION[0], RESOLUTION[1], w, rl)
     if rt is None:
-        log(f"ERROR: RT 创建失败 (preset={preset['name']})")
+        log(f"ERROR: RT 创建失败 (col={col['name']})")
         return
-    log(f"  RT ok: {rt.size_x}x{rt.size_y}")
 
     eas = get_actor_subsystem()
     sc = eas.spawn_actor_from_class(unreal.SceneCapture2D, cam_loc)
@@ -281,7 +257,7 @@ def shoot_one(actor, cam, preset, output_path):
         comp = sc.get_component_by_class(unreal.SceneCaptureComponent2D)
 
     comp.set_editor_property("texture_target", rt)
-    cap = preset.get("capture", "ldr")
+    cap = col.get("capture", "ldr")
     if cap == "base":
         comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_BASE_COLOR)
     else:
@@ -294,41 +270,27 @@ def shoot_one(actor, cam, preset, output_path):
         pp.set_editor_property("override_auto_exposure_method", True)
         pp.set_editor_property("auto_exposure_method", unreal.AutoExposureMethod.AEM_MANUAL)
         pp.set_editor_property("override_auto_exposure_bias", True)
-        pp.set_editor_property("auto_exposure_bias", float(preset["ev"]))
+        pp.set_editor_property("auto_exposure_bias", float(col["ev"]))
         pp.set_editor_property("override_bloom_intensity", True)
         pp.set_editor_property("bloom_intensity", 0.0)
-        # 饱和度（4-vector：RGB+luminance；只调 luminance 通道做整体降饱和）
-        sat = float(preset.get("sat", 1.0))
+        sat = float(col.get("sat", 1.0))
         if sat != 1.0:
             pp.set_editor_property("override_color_saturation", True)
             pp.set_editor_property("color_saturation", unreal.Vector4(sat, sat, sat, 1.0))
-        # 白平衡色温（K）
-        temp = float(preset.get("temp", 6500))
+        temp = float(col.get("temp", 6500))
         if temp != 6500:
             pp.set_editor_property("override_white_temp", True)
             pp.set_editor_property("white_temp", temp)
-        # 关 ACES tonemapper：把 film curve 拉平，让 RGB 接近线性输出
-        if preset.get("flatten", False):
-            pp.set_editor_property("override_film_slope", True)
-            pp.set_editor_property("film_slope", 1.0)
-            pp.set_editor_property("override_film_toe", True)
-            pp.set_editor_property("film_toe", 0.0)
-            pp.set_editor_property("override_film_shoulder", True)
-            pp.set_editor_property("film_shoulder", 0.0)
-            pp.set_editor_property("override_film_black_clip", True)
-            pp.set_editor_property("film_black_clip", 0.0)
-            pp.set_editor_property("override_film_white_clip", True)
-            pp.set_editor_property("film_white_clip", 1.0)
+        if col.get("flatten", False):
+            for k, v in [("film_slope", 1.0), ("film_toe", 0.0), ("film_shoulder", 0.0),
+                         ("film_black_clip", 0.0), ("film_white_clip", 1.0)]:
+                pp.set_editor_property(f"override_{k}", True)
+                pp.set_editor_property(k, v)
         else:
-            # 单独覆盖 shoulder（高光压缩），其它 film 参数走默认
-            sh = preset.get("shoulder")
+            sh = col.get("shoulder")
             if sh is not None:
                 pp.set_editor_property("override_film_shoulder", True)
                 pp.set_editor_property("film_shoulder", float(sh))
-            wc = preset.get("white_clip")
-            if wc is not None:
-                pp.set_editor_property("override_film_white_clip", True)
-                pp.set_editor_property("film_white_clip", float(wc))
         comp.set_editor_property("post_process_settings", pp)
         comp.set_editor_property("post_process_blend_weight", 1.0)
     except Exception as e:
@@ -342,56 +304,54 @@ def shoot_one(actor, cam, preset, output_path):
     sc_loc = unreal.Vector(new_origin.x - cam_dist, new_origin.y, new_origin.z)
     sc.set_actor_location(sc_loc, False, False)
     sc.set_actor_rotation(unreal.MathLibrary.find_look_at_rotation(sc_loc, new_origin), False)
+    for _ in range(WARMUP):           # 预热：空跑驱动贴图/shader 就绪
+        comp.capture_scene()
     comp.capture_scene()
     rl.export_render_target(w, rt, os.path.dirname(output_path), os.path.basename(output_path))
     eas.destroy_actor(sc)
-    log(f"  saved → {output_path}")
 
 
 def post_and_compose_grid(png_paths, row_labels, col_labels):
-    """每张：反相 alpha + unpremultiply + 合成到白底；再拼成 ROWxCOL 网格 grid.png。
-    png_paths 必须按 row-major 排列（先 row=0 的所有列，再 row=1...）。"""
+    """每张直接用原始 RGB（黑底，诊断看色）；拼成 ROWxCOL 网格 grid.png（row-major）。"""
     if not png_paths or not os.path.exists(EXTERNAL_PYTHON):
-        log(f"WARN: 跳过后处理（外部 Python 缺失？{EXTERNAL_PYTHON}）")
+        log(f"WARN: 跳过拼图（外部 Python 缺失？{EXTERNAL_PYTHON}）")
         return
     rows = len(row_labels)
     cols = len(col_labels)
-    if rows * cols != len(png_paths):
-        log(f"WARN: grid {rows}x{cols} 与图片数 {len(png_paths)} 不符，按行序拼")
     py = (
         "import sys, os\n"
         "from PIL import Image, ImageDraw, ImageFont\n"
         "import numpy as np\n"
-        "bg=(255,255,255)\n"
-        "out_dir=sys.argv[1]\n"
-        "rows=int(sys.argv[2])\n"
-        "cols=int(sys.argv[3])\n"
-        "row_labels=sys.argv[4].split('|')\n"
-        "col_labels=sys.argv[5].split('|')\n"
+        "out_dir=sys.argv[1]; rows=int(sys.argv[2]); cols=int(sys.argv[3])\n"
+        "row_labels=sys.argv[4].split('|'); col_labels=sys.argv[5].split('|')\n"
         "paths=sys.argv[6:]\n"
+        "GRAY=np.array([96,96,96],dtype='float32')\n"
         "ims=[]\n"
         "for p in paths:\n"
-        "    arr=np.array(Image.open(p).convert('RGBA'))\n"
-        "    # 诊断模式：直接用原始 RGB（黑底），跳过 alpha 反相/unpremult/合成白底\n"
-        "    rgb_out=arr[:,:,:3].astype(np.float32)\n"
-        "    im=Image.fromarray(rgb_out.astype(np.uint8),'RGB')\n"
-        "    im.save(p,optimize=True)\n"
+        "    arr=np.asarray(Image.open(p).convert('RGBA')).astype('float32')\n"  # 与 03 finalize 一致
+        "    rgb=arr[...,:3].copy(); a=255.0-arr[...,3]; af=a/255.0\n"
+        "    m=af>0.003\n"
+        "    rgb[m]=np.clip(rgb[m]/af[m][:,None],0,255)\n"                       # 反预乘
+        "    lum=rgb.max(axis=2); fg=lum[a>8]\n"
+        "    anc=np.percentile(fg,45) if fg.size else 255.0\n"
+        "    sc=min(max(135.0/max(anc,1.0),1.0),2.5)\n"                          # 温和提亮
+        "    rgb=np.clip(rgb*sc,0,255)\n"
+        "    comp=rgb*af[...,None]+GRAY[None,None,:]*(1.0-af[...,None])\n"        # 合成灰底96
+        "    im=Image.fromarray(np.clip(comp,0,255).astype('uint8'),'RGB')\n"
         "    ims.append(im)\n"
         "w,h=ims[0].size\n"
-        "scale=0.30\n"
+        "scale=0.26\n"
         "cw,ch=int(w*scale),int(h*scale)\n"
-        "row_pad=120\n"
-        "col_pad=60\n"
-        "tot_w=row_pad+cw*cols\n"
-        "tot_h=col_pad+ch*rows\n"
-        "stitched=Image.new('RGB',(tot_w,tot_h),bg)\n"
+        "row_pad=160; col_pad=44\n"
+        "tot_w=row_pad+cw*cols; tot_h=col_pad+ch*rows\n"
+        "stitched=Image.new('RGB',(tot_w,tot_h),(40,40,40))\n"
         "draw=ImageDraw.Draw(stitched)\n"
-        "try: font=ImageFont.truetype('arial.ttf',32)\n"
+        "try: font=ImageFont.truetype('arial.ttf',26)\n"
         "except: font=ImageFont.load_default()\n"
         "for c,lab in enumerate(col_labels):\n"
-        "    draw.text((row_pad+c*cw+8,8),lab,fill=(0,0,0),font=font)\n"
+        "    draw.text((row_pad+c*cw+8,8),lab,fill=(255,255,0),font=font)\n"
         "for r,lab in enumerate(row_labels):\n"
-        "    draw.text((8,col_pad+r*ch+ch//2-16),lab,fill=(0,0,0),font=font)\n"
+        "    draw.text((8,col_pad+r*ch+ch//2-12),lab,fill=(0,255,255),font=font)\n"
         "for r in range(rows):\n"
         "    for c in range(cols):\n"
         "        idx=r*cols+c\n"
@@ -402,20 +362,20 @@ def post_and_compose_grid(png_paths, row_labels, col_labels):
     )
     try:
         r = subprocess.run(
-            [EXTERNAL_PYTHON, "-c", py, OUTPUT_DIR,
+            [EXTERNAL_PYTHON, "-X", "utf8", "-c", py, OUTPUT_DIR,
              str(rows), str(cols), "|".join(row_labels), "|".join(col_labels)] + png_paths,
-            capture_output=True, text=True, timeout=120)
+            capture_output=True, text=True, encoding="utf-8", timeout=180)
         if r.returncode == 0:
             log(f"grid ok ({len(png_paths)} files) — {r.stdout.strip()}")
         else:
-            log(f"post-process FAIL: {r.stderr[:500]}")
+            log(f"grid FAIL: {r.stderr[:500]}")
     except Exception as e:
-        log(f"post-process exception: {e}")
+        log(f"grid exception: {e}")
 
 
 def main():
     log("=" * 60)
-    log("Lighting Comparison Test")
+    log("阶段0 诊断：base vs final 参数对比网格")
     log("=" * 60)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -424,46 +384,75 @@ def main():
     neutralize_ppv()
 
     aal = unreal.EditorAssetLibrary
-    mesh_path = find_test_mesh()
-    if mesh_path is None:
-        log(f"ERROR: 找不到含 '{TEST_CHARACTER}' 的 SkeletalMesh")
-        return
-    log(f"test mesh: {mesh_path}")
-    mesh = aal.load_asset(mesh_path)
-
     eas = get_actor_subsystem()
+    cam = find_actor_by_label("Cam_Shoot")
+    if cam is None:
+        log("ERROR: 没有 Cam_Shoot，请先跑 01_setup.py")
+        return
     anchor = find_actor_by_label("SpawnAnchor")
     spawn_loc = anchor.get_actor_location() if anchor else unreal.Vector(0, 0, 0)
-    actor = eas.spawn_actor_from_object(mesh, spawn_loc)
-    cam = find_actor_by_label("Cam_Shoot")
-    fit_camera(cam, actor)
 
-    # 依次跑所有网格 cell
-    written = []
-    for i, p in enumerate(PRESETS):
-        log(f"--- [{i+1}/{len(PRESETS)}] ---")
-        apply_preset(p)
-        out = os.path.join(OUTPUT_DIR, f"{p['name']}.png")
-        shoot_one(actor, cam, p, out)
-        if os.path.exists(out):
-            written.append(out)
+    written = []   # row-major：先 mesh0 的所有 col，再 mesh1 ...
+    row_labels = []
+    for mi, (mlabel, mpath) in enumerate(MESHES):
+        if not aal.does_asset_exist(mpath):
+            log(f"[{mi+1}/{len(MESHES)}] 缺资源，跳过: {mpath}")
+            # 仍补齐占位，保证 grid 对齐
+            row_labels.append(mlabel + "(missing)")
+            for _ in COLS:
+                written.append(None)
+            continue
+        log(f"[{mi+1}/{len(MESHES)}] {mlabel}")
+        mesh = aal.load_asset(mpath)
+        actor = eas.spawn_actor_from_object(mesh, spawn_loc)
+        if actor is None:
+            log(f"  spawn 失败: {mpath}")
+            row_labels.append(mlabel + "(spawn-fail)")
+            for _ in COLS:
+                written.append(None)
+            continue
+        fit_camera(cam, actor)
+        row_labels.append(mlabel)
+        for col in COLS:
+            apply_lighting(col)
+            out = os.path.join(OUTPUT_DIR, f"{mlabel}__{col['name']}.png")
+            try:
+                shoot_one(actor, cam, col, out)
+                written.append(out if os.path.exists(out) else None)
+                log(f"    {col['name']:<9} → {'ok' if os.path.exists(out) else 'MISS'}")
+            except Exception as e:
+                log(f"    {col['name']} ERROR: {e}")
+                written.append(None)
+        eas.destroy_actor(actor)
+        try:
+            unreal.EditorAssetLibrary.unload_asset(mpath)
+            unreal.SystemLibrary.collect_garbage()
+        except Exception:
+            pass
 
-    eas.destroy_actor(actor)
-
-    log("-" * 40)
-    row_labels = ["probe"]
-    col_labels = [p["name"] for p in PRESETS]
-    post_and_compose_grid(written, row_labels, col_labels)
+    col_labels = [c["name"] for c in COLS]
+    # grid 拼接需要每格都有文件；用占位黑图补 None
+    placeholder = os.path.join(OUTPUT_DIR, "_blank.png")
+    if any(p is None for p in written):
+        try:
+            from_rl = getattr(unreal, "RenderingLibrary", None) or getattr(unreal, "KismetRenderingLibrary", None)
+            blank_rt = make_rt(RESOLUTION[0], RESOLUTION[1], get_world(), from_rl)
+            from_rl.export_render_target(get_world(), blank_rt, OUTPUT_DIR, "_blank.png")
+        except Exception:
+            placeholder = None
+    grid_inputs = [p if p else placeholder for p in written]
+    grid_inputs = [p for p in grid_inputs if p]
+    if len(grid_inputs) == len(written):
+        post_and_compose_grid(grid_inputs, row_labels, col_labels)
+    else:
+        log("WARN: 有缺图且无占位，单图已出但 grid 跳过；逐张看 OUTPUT_DIR")
 
     log("\n" + "=" * 60)
-    log("DONE")
+    log("DONE — 看 grid.png")
     log("=" * 60)
     log(f"输出: {OUTPUT_DIR}")
-    log(f"Chr 衣服变黑诊断：{len(PRESETS)} 个 probe 横排对比")
-    log(">>> 看 B_base_only：衣服有色 = 材质 OK，是渲染问题；衣服仍黑 = 材质本身 base=0")
-    log(">>> 看 D_agt：能正常显示 = Chr 也是 unlit emissive 体系")
-    log(">>> 看 E_cst_aces：能正常显示 = flatten 把暗部压死了，换 ACES 即可")
-
+    log(">>> 灯光扫描：看 grid.png 哪列皮肤白皙自然(不橙)、衣服又不过曝糊白")
+    log(">>> 列：noLight→dir300/700/1200/1900(方向光渐强)→sky600(纯天光验证)")
     try:
         os.startfile(OUTPUT_DIR)
     except Exception:

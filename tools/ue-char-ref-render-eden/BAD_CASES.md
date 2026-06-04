@@ -2,6 +2,22 @@
 
 记录格式：`角色 mesh — 现象 — 根因 — 可能的单独处理`
 
+## 2026-06 final 方案更新（重要）
+
+已切换到 **无灯 final color + sat1.3 + 灰底直出**（见 README）。早期 base 方案的多数 bad case **已解决**：
+- ✅ **皮肤占位橙**：final 出材质真实肤色，`skin_fix` hack 弃用（sat1.3 平衡：1.4 偏橙 / 1.0 偏白）。
+- ✅ **Agt 红角 emissive / 眼睛**：final 含自发光，红角、眼睛回来了。
+- ✅ **缺件**（马/杆/法杖）：取景改整体包围盒，武器/坐骑完整入画。
+
+**final 方案下仍坏的（渲染失败类，渲染侧无解，材质/资产层面）**：
+- **整张纯黑 + alpha 全不透明**（UE 无 coverage 写入）：`Agt_Amber`(albedo 即黑)、`Cst_Cabala`、`Cst_Celince`、`Cst_Snake_Hollow`、`Cst_RC77_Water`、`Cst_TiamatMorph_Hollow`、`Cst_PaperCrane_Hollow` 等 — 灰底救不回（角色本身渲成黑）。
+- **`Chr_Friday` 系列整体渲染失败**（诊断时整行全黑）— 待单独排查（spawn/bounds 异常或材质特殊）。
+- 这些在灰底拼图里会是黑底黑角色，属 mesh/材质问题，单独处理或弃用。
+
+---
+
+> 以下为早期 **base color 方案** 的 bad case 记录（多数已被 final 方案解决，保留作历史参考）。
+
 ## Cst 组（参数已定型：capture=base, brighten_pct=70, target=170, max=15）
 
 - **Cst_Arielle_Const** — 裸露皮肤(腿)偏橙 — 皮肤材质 base color 槽是占位橙色，真实肤色只在 NPR 光照里 — 后续可单独做颜色重映射或单独用 final 极弱灯。

@@ -15,7 +15,8 @@ VIEW = sys.argv[2] if len(sys.argv) > 2 else "v0_front.png"
 COLS = int(sys.argv[3]) if len(sys.argv) > 3 else 6
 CELL_W = 240          # 每格缩略图宽
 LABEL_H = 26          # 名字条高
-BG = (18, 18, 18)
+BG = (40, 40, 40)     # 画布底（比缩略图灰底稍深，衬出每张图边界）
+GRAY = (96, 96, 96)   # 缩略图合成底色（交付灰底，透明图合到这上面看真实效果）
 PAD = 6
 
 def main():
@@ -32,7 +33,9 @@ def main():
     thumbs = []
     cell_h = 0
     for label, p in items:
-        im = Image.open(p).convert("RGB")
+        src = Image.open(p).convert("RGBA")          # 透明图合成到灰底；老 RGB 图 alpha 全 255 也兼容
+        im = Image.new("RGB", src.size, GRAY)
+        im.paste(src, mask=src.split()[-1])
         w, h = im.size
         nh = int(h * CELL_W / w)
         thumbs.append((label, im.resize((CELL_W, nh))))
