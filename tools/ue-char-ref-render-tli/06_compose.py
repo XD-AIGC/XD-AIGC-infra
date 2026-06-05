@@ -24,7 +24,7 @@ INPUT_ROOT = sys.argv[1] if len(sys.argv) > 1 else r"D:/ref_shots/full"
 OUTPUT_DIR = sys.argv[2] if len(sys.argv) > 2 else r"D:/角色识别数据/伊瑟角色参考图"
 GAP_INNER = 64   # 角色之间留白
 GAP_OUTER = 64   # 整张图四周留白
-BG_COLOR = (0, 0, 0)  # 黑底
+BG_COLOR = (96, 96, 96)  # 深灰底（与灰底重渲的单图背景统一；原为 (0,0,0) 黑底）
 SKIP_EXISTING = True  # 已存在跳过，续跑友好
 
 

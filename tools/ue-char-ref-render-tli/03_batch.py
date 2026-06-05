@@ -21,9 +21,13 @@ import subprocess
 EXTERNAL_PYTHON = r"C:/Users/XINDONG/AppData/Local/Programs/Python/Python312/python.exe"
 
 # ============ 配置 ============
-OUTPUT_DIR    = r"D:/角色识别数据/火炬之光"      # 全量输出（火炬之光）
-WHITELIST_OUTPUT_DIR = r"D:/ref_shots/tli_preset_test"   # WHITELIST 模式下使用
+OUTPUT_DIR    = r"D:/角色识别数据/火炬之光_透明"      # 全量输出：RGBA 透明单图（中间产物，06_compose 再合成灰底；不覆盖原黑底 火炬之光/）
+WHITELIST_OUTPUT_DIR = r"D:/ref_shots/tli_alpha_probe"   # WHITELIST 模式下使用（alpha 诊断）
 RESOLUTION    = (1024, 2304)
+# 灰底重渲：背景从黑 (0,0,0) 改为深灰 sRGB(96,96,96)。背景靠 base color 路的灰背景板提供
+# （base color 不受光/不 tonemap，均匀精确）。此值是背景板材质 base color 的 linear 输入。
+# 实测标定：0.117 → PNG≈64；按单点反推取 0.22 目标 96，小批保留分图后再精调。
+BG_GRAY_LINEAR = 0.22
 LEVEL_PATH    = "/Game/Maps/L_CharRefShoot"
 SEARCH_DIRS   = ["/Game/Art/Characters", "/Game/Art/Fashion/Heros"]  # 两个目标目录，镜像输出
 MESH_REQUIRE_PATH = "/Meshes/"                       # TLI: SkeletalMesh 都在各角色 Meshes/ 下
@@ -64,11 +68,26 @@ _TLI_BLACK_TEST = [
     "/Game/Art/Characters/Monster/GaoYuanXiYi/Meshes/SK_GaoYuanXiYi_Skin",
     "/Game/Art/Characters/Monster/Boss/ChuanSuoZhe/Meshes/SK_ChuanSuoZheZheXue_Skin",
 ]
-WHITELIST_MESH_PATHS = []  # 全量；小批验证用 _TLI_BLACK_TEST / _TLI_MIX_TEST
+# alpha 诊断：先渲 3 个代表角色（Lit 怪物 / NPR 英雄 / 时装），保留每路原始 RGBA，
+# 分析 alpha matte 质量后再定最终合成方案。全量时改回 []。
+_TLI_ALPHA_PROBE = [
+    "/Game/Art/Characters/Monster/AiRenDiLei/Meshes/SK_AiRenDiLei_Skin",          # Lit 怪物
+    "/Game/Art/Characters/Hero/MaoNv/Meshes/SK_MaoNv2_Skin",                      # NPR 英雄
+    "/Game/Art/Fashion/Heros/Hero/C_BingHuoRen_001/Meshes/SK_C_BingHuoRen_001_Skin",  # 时装 NPR
+]
+WHITELIST_MESH_PATHS = []  # 全量（小批验证时改成 _TLI_ALPHA_PROBE 等）
+
+# alpha 诊断期：关掉背景板，背景渲透明（clear_color=0），保留各路原始 RGBA 看 matte
+USE_BG_PLANE = False
 
 VIEWS = [("front", 180.0), ("side", -90.0), ("back", 0.0), ("tq", 135.0)]
 FILL_RATIO = 0.80
-SKIP_EXISTING = False  # 覆盖重渲（验证/修复期）
+SKIP_EXISTING = True   # 全量续传（中途 crash 重跑自动跳过已完成的 mesh）
+KEEP_TMP = False       # 全量：合成后删除 base/final 临时分图
+# alpha 提纯双阈值：coverage<=LOW 透明、>=HIGH 拉满实心、中间窄羽化。
+# 实测：背景 cov 几乎都 <=2，半透纱裙/白裤 cov 中位 6-8、最低 ~3 → LOW=2/HIGH=4 既让半透材质实心又不脏背景。
+ALPHA_LOW = 2.0
+ALPHA_HIGH = 4.0
 WARMUP_CAPTURES = 3    # 每个 mesh 截图前空跑几次预热（驱动贴图/shader 就绪，防黑剪影）
 
 # ============ 按角色目录分组的渲染预设 ============
@@ -464,6 +483,74 @@ def apply_capture_pp(comp, preset):
         log(f"apply_capture_pp failed: {e}")
 
 
+# ============ 灰背景板 ============
+# base color / final color LDR 两路的「无几何」像素都不吃 RenderTarget 的 clear_color
+# （实测背景恒为 0/黑）。所以放一块实体 Lit 灰板当背景：base color 路直接读到板的
+# base color = 灰；combine_max 取 max 后背景=灰，角色与边缘抗锯齿零损失。
+_BG_STATE = {"plane": None, "mat": None}
+
+
+def _make_gray_bg_material():
+    aal = unreal.EditorAssetLibrary
+    mat_path = "/Game/_CharRef/M_CharRefGrayBG"
+    if aal.does_asset_exist(mat_path):
+        return aal.load_asset(mat_path)
+    try:
+        mat = unreal.AssetToolsHelpers.get_asset_tools().create_asset(
+            "M_CharRefGrayBG", "/Game/_CharRef", unreal.Material, unreal.MaterialFactoryNew())
+        mat.set_editor_property("two_sided", True)  # 双面，免背面剔除朝向问题
+        node = unreal.MaterialEditingLibrary.create_material_expression(
+            mat, unreal.MaterialExpressionConstant3Vector)
+        node.set_editor_property("constant", unreal.LinearColor(
+            BG_GRAY_LINEAR, BG_GRAY_LINEAR, BG_GRAY_LINEAR, 1.0))
+        unreal.MaterialEditingLibrary.connect_material_property(
+            node, "", unreal.MaterialProperty.MP_BASE_COLOR)
+        unreal.MaterialEditingLibrary.recompile_material(mat)
+        aal.save_asset(mat_path)
+        log(f"gray bg material created: base_color_linear={BG_GRAY_LINEAR}")
+        return mat
+    except Exception as e:
+        log(f"make gray bg material failed: {e}")
+        return None
+
+
+def get_or_create_bg_plane():
+    if not USE_BG_PLANE:
+        return None
+    if _BG_STATE["plane"] is not None:
+        return _BG_STATE["plane"]
+    eas = get_actor_subsystem()
+    if _BG_STATE["mat"] is None:
+        _BG_STATE["mat"] = _make_gray_bg_material()
+    plane_mesh = unreal.EditorAssetLibrary.load_asset("/Engine/BasicShapes/Plane")
+    if plane_mesh is None:
+        log("WARN: /Engine/BasicShapes/Plane 不存在，背景板跳过")
+        return None
+    plane = eas.spawn_actor_from_object(plane_mesh, unreal.Vector(0, 0, 0))
+    plane.set_actor_label("CharRef_BGPlane")
+    plane.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=90.0, yaw=0.0), False)  # 竖直，正对相机(-X)
+    plane.set_actor_scale3d(unreal.Vector(500.0, 500.0, 1.0))  # 100×500 = 5万单位，必覆盖视野
+    mat = _BG_STATE["mat"]
+    try:
+        smc = plane.static_mesh_component
+        if mat is not None:
+            smc.set_material(0, mat)
+        smc.set_editor_property("cast_shadow", False)  # 背景板不投阴影
+    except Exception as e:
+        log(f"bg plane component setup failed: {e}")
+    _BG_STATE["plane"] = plane
+    log("bg plane spawned")
+    return plane
+
+
+def place_bg_plane(plane, origin, cam_dist):
+    """把背景板摆到角色后方(+X)、竖直正对相机，距离足够远不穿模。"""
+    if plane is None:
+        return
+    plane.set_actor_location(
+        unreal.Vector(origin.x + cam_dist * 2.0, origin.y, origin.z), False, False)
+
+
 def cleanup_capture():
     if _SC_STATE["sc"] is not None:
         try:
@@ -473,6 +560,12 @@ def cleanup_capture():
     _SC_STATE["rt"] = None
     _SC_STATE["sc"] = None
     _SC_STATE["comp"] = None
+    if _BG_STATE["plane"] is not None:
+        try:
+            get_actor_subsystem().destroy_actor(_BG_STATE["plane"])
+        except Exception:
+            pass
+    _BG_STATE["plane"] = None
 
 
 def shoot_one(mesh_path, mesh_name):
@@ -525,6 +618,7 @@ def shoot_one(mesh_path, mesh_name):
 
     fit_camera(cam, actor)
     comp, rt = get_or_create_capture(cam)
+    bg_plane = get_or_create_bg_plane()  # 灰背景板
     # 每个 mesh 同时截 base + final 两种 source，后处理逐像素取较亮者合并 →
     # 通吃 Lit(base 亮) / NPR(final 亮) / 混合材质，无需按类别猜
     preset = preset_for_mesh(mesh_path)
@@ -543,6 +637,18 @@ def shoot_one(mesh_path, mesh_name):
     groups = [(out_paths[i], []) for i in range(len(VIEWS))]  # (最终输出, [base_tmp, final_tmp])
     for src_tag, src in SOURCES:
         comp.set_editor_property("capture_source", src)
+        # 背景板只在 base color 路显示（base color 不受光/不 tonemap → 均匀精确灰）；
+        # final color 路隐藏背景板（背景=黑），combine_max 取 max → 背景=base 的均匀灰。
+        if bg_plane is not None:
+            hide = (src_tag != "base")
+            try:
+                bg_plane.set_actor_hidden_in_game(hide)
+            except Exception:
+                pass
+            try:
+                bg_plane.set_is_temporarily_hidden_in_editor(hide)
+            except Exception:
+                pass
         # 预热：对准角色空跑几次，驱动贴图/shader 就绪，否则首帧黑剪影。丢弃。
         try:
             actor.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=0.0, yaw=VIEWS[0][1]), False)
@@ -550,6 +656,7 @@ def shoot_one(mesh_path, mesh_name):
             sc_actor.set_actor_location(unreal.Vector(wo.x - cam_dist, wo.y, wo.z), False, False)
             sc_actor.set_actor_rotation(unreal.MathLibrary.find_look_at_rotation(
                 unreal.Vector(wo.x - cam_dist, wo.y, wo.z), wo), False)
+            place_bg_plane(bg_plane, wo, cam_dist)
             for _ in range(WARMUP_CAPTURES):
                 comp.capture_scene()
         except Exception:
@@ -561,6 +668,7 @@ def shoot_one(mesh_path, mesh_name):
                 sc_loc = unreal.Vector(new_origin.x - cam_dist, new_origin.y, new_origin.z)
                 sc_actor.set_actor_location(sc_loc, False, False)
                 sc_actor.set_actor_rotation(unreal.MathLibrary.find_look_at_rotation(sc_loc, new_origin), False)
+                place_bg_plane(bg_plane, new_origin, cam_dist)
                 tmp_name = f"v{i}_{view}__{src_tag}.png"
                 comp.capture_scene()
                 export_rt(_SC_STATE["rl"], w, rt, mesh_dir, tmp_name)
@@ -581,33 +689,57 @@ def shoot_one(mesh_path, mesh_name):
 
 
 def combine_max(groups):
-    """groups: [(out_path, [base_tmp, final_tmp]), ...]
-    逐像素取 base/final 较亮者合并为最终黑底 RGB（Lit→base 亮处胜，NPR→final 亮处胜），
-    丢掉不可靠的 alpha，删临时文件。spec 走 stdin 避免中文路径 argv 编码问题。
+    """把每视角的 base/final 两路合成为【RGBA 透明单图】（伊瑟式，供 06_compose 合成任意底色）：
+      RGB   = max(base, final)         —— 与原黑底图同款角色色（Lit→base 亮、NPR→final 亮）
+      alpha = 提纯后的 coverage         —— final 路 PropagateAlpha 给的是 1-coverage，
+              反相得 coverage，再 cov/ALPHA_THR 拉满：实心区 α=255、最外圈羽化抗锯齿。
+    base 路 alpha 全 0（无 matte），coverage 只能取自 final 路。spec 走 stdin 避免中文路径编码问题。
     """
     pairs = [(out, tmps) for out, tmps in groups if tmps]
     if not pairs or not os.path.exists(EXTERNAL_PYTHON):
         return
-    spec = json.dumps(pairs, ensure_ascii=False)
+    spec = json.dumps({"pairs": pairs, "keep_tmp": bool(KEEP_TMP),
+                       "low": float(ALPHA_LOW), "high": float(ALPHA_HIGH)}, ensure_ascii=False)
     script = (
         "import sys, json, os\n"
         "from PIL import Image\n"
         "import numpy as np\n"
-        "pairs = json.loads(sys.stdin.read())\n"
-        "for out, tmps in pairs:\n"
-        "    acc = None\n"
+        "d = json.loads(sys.stdin.read())\n"
+        "low = d['low']; high = d['high']; keep = d['keep_tmp']\n"
+        "for out, tmps in d['pairs']:\n"
+        "    base = final = None\n"
         "    for t in tmps:\n"
         "        if not os.path.exists(t):\n"
         "            continue\n"
-        "        a = np.asarray(Image.open(t).convert('RGB'))\n"
-        "        acc = a if acc is None else np.maximum(acc, a)\n"
-        "    if acc is not None:\n"
-        "        Image.fromarray(acc, 'RGB').save(out, optimize=True)\n"
-        "    for t in tmps:\n"
-        "        try:\n"
-        "            os.remove(t)\n"
-        "        except Exception:\n"
-        "            pass\n"
+        "        arr = np.asarray(Image.open(t).convert('RGBA')).astype(np.float32)\n"
+        "        if t.endswith('__base.png'):\n"
+        "            base = arr\n"
+        "        else:\n"
+        "            final = arr\n"
+        "    if base is None and final is None:\n"
+        "        continue\n"
+        "    rgbs = [x[:, :, :3] for x in (base, final) if x is not None]\n"
+        "    rgb = rgbs[0] if len(rgbs) == 1 else np.maximum(rgbs[0], rgbs[1])\n"
+        "    # alpha = final 覆盖(含 translucent 纱裙) ∪ base 几何(opaque 实体)。\n"
+        "    # final 路某些视角对下半身/opaque 渲染缺失，但 base color 完整渲了 opaque，取并集补回。\n"
+        "    if final is not None:\n"
+        "        cov = 255.0 - final[:, :, 3]\n"
+        "        af = np.clip((cov - low) / (high - low), 0.0, 1.0)\n"
+        "    else:\n"
+        "        af = np.ones(rgb.shape[:2], np.float32)\n"
+        "    if base is not None:\n"
+        "        bgeo = np.clip((base[:, :, :3].max(2) - low) / (high - low), 0.0, 1.0)\n"
+        "    else:\n"
+        "        bgeo = np.zeros(rgb.shape[:2], np.float32)\n"
+        "    a = np.maximum(af, bgeo) * 255.0\n"
+        "    outarr = np.dstack([rgb, a]).astype(np.uint8)\n"
+        "    Image.fromarray(outarr, 'RGBA').save(out, optimize=True)\n"
+        "    if not keep:\n"
+        "        for t in tmps:\n"
+        "            try:\n"
+        "                os.remove(t)\n"
+        "            except Exception:\n"
+        "                pass\n"
     )
     try:
         subprocess.run([EXTERNAL_PYTHON, "-X", "utf8", "-c", script],
