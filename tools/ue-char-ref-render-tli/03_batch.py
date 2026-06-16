@@ -21,9 +21,13 @@ import subprocess
 EXTERNAL_PYTHON = r"C:/Users/XINDONG/AppData/Local/Programs/Python/Python312/python.exe"
 
 # ============ 配置 ============
-OUTPUT_DIR    = r"D:/角色识别数据/火炬之光_透明"      # 全量输出：RGBA 透明单图（中间产物，06_compose 再合成灰底；不覆盖原黑底 火炬之光/）
-WHITELIST_OUTPUT_DIR = r"D:/ref_shots/tli_alpha_probe"   # WHITELIST 模式下使用（alpha 诊断）
-RESOLUTION    = (1024, 2304)
+OUTPUT_DIR    = r"D:/角色识别数据/火炬之光_透明_v2"   # 全量输出：RGBA 透明单图（中间产物，06_compose 再合成灰底）。
+                                                      # 方形重渲专用新目录，绝不覆盖旧的 火炬之光_透明/ 与灰底成品。
+WHITELIST_OUTPUT_DIR = r"D:/ref_shots/tli_v2_test"   # WHITELIST 小批测试专用（与全量、旧数据均隔离）
+# 方形画幅：瘦高角色吃满高度、矮胖/宽体/带翅角色吃满宽度，每个角色的长边都接近填满，
+# 人形与怪物画质拉平（原 1024×2304 竖图对宽体角色严重欠采样）。最终取景由 06_compose
+# 按 alpha 包围盒裁剪 + 统一缩放定稿，这里只负责把角色尽量大地渲进方形帧。
+RESOLUTION    = (2048, 2048)
 # 灰底重渲：背景从黑 (0,0,0) 改为深灰 sRGB(96,96,96)。背景靠 base color 路的灰背景板提供
 # （base color 不受光/不 tonemap，均匀精确）。此值是背景板材质 base color 的 linear 输入。
 # 实测标定：0.117 → PNG≈64；按单点反推取 0.22 目标 96，小批保留分图后再精调。
@@ -75,15 +79,132 @@ _TLI_ALPHA_PROBE = [
     "/Game/Art/Characters/Hero/MaoNv/Meshes/SK_MaoNv2_Skin",                      # NPR 英雄
     "/Game/Art/Fashion/Heros/Hero/C_BingHuoRen_001/Meshes/SK_C_BingHuoRen_001_Skin",  # 时装 NPR
 ]
-WHITELIST_MESH_PATHS = []  # 全量（小批验证时改成 _TLI_ALPHA_PROBE 等）
+WHITELIST_MESH_PATHS = []  # 全量（小批验证时改成 _TLI_MIX_TEST / _TLI_ALPHA_PROBE / _TLI_HOLE_FIX 等）
+
+# ============ 破洞修复（matte 几何剪影 alpha）============
+# 颜色凑出的 alpha 对深色材质（裙摆/布料受遮挡处 base+final 都黑）会抠出破洞。
+# matte pass：把角色材质整体临时换成纯白，单独截一张剪影当 alpha——按几何来、不看颜色，
+# 深色处有网格→白→实心（破洞消失），合法镂空（无网格）→黑→仍透明。
+# 用法：USE_MATTE_ALPHA=True + WHITELIST_MESH_PATHS=_TLI_HOLE_FIX + SKIP_EXISTING=False，
+#       先把 OUTPUT_DIR 指向测试目录目检 matte 是否生效，OK 后再指回 火炬之光_透明_v2 覆盖修复。
+USE_MATTE_ALPHA = False  # True=破洞修复模式（matte 几何剪影 alpha，配 _TLI_HOLE_FIX 用）
+_TLI_HOLE_FIX = [
+    "/Game/Art/Characters/Hero_Showcase/BingHuoRen/Meshes/SK_BingHuoRen2_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_BingHuoRen_001/Meshes/SK_C_BingHuoRen_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_BingHuoRen_002/Meshes/SK_C_BingHuoRen_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero/C_BingHuoRen_002/Meshes/SK_C_BingHuoRen_002_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_BingHuoRen_003/Meshes/SK_C_BingHuoRen_003_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_MaoNv_001/Meshes/SK_C_MaoNv_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_MaoNv_002/Meshes/SK_C_MaoNv_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_NanFaShi_001/Meshes/SK_C_NanFaShi_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero/C_NanFaShi_001/Meshes/SK_C_NanFaShi_001_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_NanFaShi_002/Meshes/SK_C_NanFaShi_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_NanHuoQiang_002/Meshes/SK_C_NanHuoQiang_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_NanHuoQiang_003/Meshes/SK_C_NanHuoQiang_003_Skin_Showcase",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_TaoTuoZhe_001/Meshes/SK_C_TaoTuoZhe_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YeManRen_001/Meshes/SK_C_YeManRen_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YeManRen_002/Meshes/SK_C_YeManRen_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero/C_YeManRen_002/Meshes/SK_C_YeManRen_002_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YeManRen_003/Meshes/SK_C_YeManRen_003_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YueNv_001/Meshes/SK_C_YueNv_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YueNv_002/Meshes/SK_C_YueNv_002_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YueNv_003/Meshes/SK_C_YueNv_003_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_ZhiHuiGuan_001/Meshes/SK_C_ZhiHuiGuan_001_Showcase_Skin",
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_ZhiHuiGuan_002/Meshes/SK_C_ZhiHuiGuan_002_Showcase_Skin",
+    "/Game/Art/Characters/Monster/Boss/ChiGuiWuShi/Meshes/SK_ChiGui_Skin",
+    "/Game/Art/Characters/Monster/Boss/ChuanSuoZhe/Meshes/SK_ChuanSuoZheZheXue_Skin",
+    "/Game/Art/Characters/Monster/Boss/ChuanSuoZhe/Meshes/SK_ChuanSuoZhe_Skin",
+    "/Game/Art/Characters/Monster/Boss/ChuanSuoZhe/Meshes/SK_ChuanSuoZhe_XiaoGuai_Skin.SK_ChuanSuoZhe_XiaoGuai_Skin_SK_ChuanSuoZhe",  # 对象名非标准，用完整对象路径
+    "/Game/Art/Characters/NPC/FengYiXueLai/Meshes/SK_FengYiXueLai_Skin",
+    "/Game/Art/Characters/Monster/GeBuLinJiSi/Meshes/SK_GeBuLinJiSi_Skin_Fire",
+    "/Game/Art/Characters/Hero/HaiYao_mermaid/Meshes/SK_HaiYao_mermaid_Skin",
+    "/Game/Art/Characters/Monster/JiaoShiShengCaiGuan/Meshes/SK_JiaoShiShengCaiGuan_Skin",
+    "/Game/Art/Characters/Monster/BZ_JuYanBao_Elite/Meshes/SK_JuYanBao_02_Skin",
+    "/Game/Art/Characters/Monster/BZ_JuYanBao_Elite/Meshes/SK_JuYanBao_03_Skin",
+    "/Game/Art/Characters/Monster/BZ_JuYanBao_Elite/Meshes/SK_JuYanBao_Skin",
+    "/Game/Art/Characters/Monster/JueXingZhe4D05/Meshes/SK_JueXingZhe4D05_Skin",
+    "/Game/Art/Characters/Monster/JueXingZhe4D06/Meshes/SK_JueXingZhe4D06_Skin",
+    "/Game/Art/Characters/Token/JueXingZheFanYingDui/Meshes/SK_JueXingZheFanYingDui_Skin",
+    "/Game/Art/Characters/Monster/JueXingZhePingZhang/Meshes/SK_JueXingZhePingZhang_02_Skin",
+    "/Game/Art/Characters/Monster/JueXingZhePingZhang/Meshes/SK_JueXingZhePingZhang_Skin",
+    "/Game/Art/Characters/Monster/JueXingZheShenYuan/Meshes/SK_JueXingZheShenYuan_Skin",
+    "/Game/Art/Characters/Monster/Boss/LaiAnYiHua/Meshes/SK_LaiAnYiHua_Skin",
+    "/Game/Art/Characters/Monster/Boss/LaiAnYiHua/Meshes/SK_LaiAnYiHua_Skin_2",
+    "/Game/Art/Characters/NPC_Showcase/LaiAn/Meshes/SK_LaiAn_1_Showcase_Skin",
+    "/Game/Art/Characters/NPC/LaiAn/Meshes/SK_LaiAn_1_Skin_HuanYing2",
+    "/Game/Art/Characters/NPC_Showcase/LaiAn/Meshes/SK_LaiAn_2_Showcase_Skin",
+    "/Game/Art/Characters/NPC_Showcase/LiFu/Meshes/SK_LiFu_Showcase_Skin",
+    "/Game/Art/Characters/NPC_Showcase/LiFu/Meshes/SK_LiFu_Showcase_Skin_Phase2",
+    "/Game/Art/Characters/Hero_Showcase/NanFaShi/Meshes/SK_NanFaShi2_Showcase_Skin",
+    "/Game/Art/Characters/Hero/NanFaShi/Meshes/SK_NanFaShi2_Skin",
+    "/Game/Art/Characters/Hero_Showcase/NanHuoQiang/Meshes/SK_NanHuoQiang2_Showcase_Skin",
+    "/Game/Art/Characters/Hero/Nanhuoqiang/Meshes/SK_NanHuoQiang2_Skin",
+    "/Game/Art/Characters/Pet_Showcase/R_XianYouXiaoYou/Meshes/SK_R_XianYouXiaoYou_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/R_YiDongDianZi/Meshes/SK_R_YiDongDianZi_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_AiYuanXianQiu/Meshes/SK_SR_AiYuanXianQiu_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_CaiYunZhe/Meshes/SK_SR_CaiYunZhe_Showcas_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_ChunKunXiaoWo/Meshes/SK_SR_ChunKunXiaoWo_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_GuYingYouYou/Meshes/SK_SR_GuYingYouYou_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SR_GuYingYouYou/Meshes/SK_SR_GuYingYouYou_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_HuaXinXiaoMan/Meshes/SK_SR_HuaXinXiaoMan_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SR_HuaXinXiaoMan/Meshes/SK_SR_HuaXinXiaoMan_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_LinDongMangHan/Meshes/SK_SR_LinDongMangHan_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_LvXingXiaoXi/Meshes/SK_SR_LvXingXiaoXi_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_TanCaiXiaoLi/Meshes/SK_SR_TanCaiXiaoLi_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SR_YouYuQingQi/Meshes/SK_SR_YouYuQingQi__Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_AKong/Meshes/SK_SSR_AKong_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_BaiEZhiLing/Meshes/SK_SSR_BaiEZhiLing_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_BuXingZhe/Meshes/SK_SSR_BuXingZhe_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SSR_BuXingZhe/Meshes/SK_SSR_BuXingZhe_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_CangLanQiShi/Meshes/SK_SSR_CangLanQiShi_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_ChiSan/Meshes/SK_SSR_ChiSan_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_EYuShiTu/Meshes/SK_SSR_EYuShiTu_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SSR_EYuShiTu/Meshes/SK_SSR_EYuShiTu_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_FengBeiQiShi/Meshes/SK_SSR_FengBeiQiShi_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_GaoSiZhiZhen/Meshes/SK_SSR_GaoSiZhiZhen_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_GuChongZhiNv/Meshes/SK_SSR_GuChongZhiNv_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_HuaYuZhe/Meshes/SK_SSR_HuaYuZhe_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_JiGuanQuanBing/Meshes/SK_SSR_JiGuanQuanBing_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_KuiBing/Meshes/SK_SSR_KuiBing_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SSR_KuiBing/Meshes/SK_SSR_KuiBing_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_LingLei/Meshes/SK_SSR_LingLei_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_LongXieHuoNv/Meshes/SK_SSR_LongXieHuoNv_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_ShengGe/Meshes/SK_SSR_ShengGe_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_WuXie/Meshes/SK_SSR_WuXie_Showcase_Skin",
+    "/Game/Art/Characters/Pet/SSR_WuXie/Meshes/SK_SSR_WuXie_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_XianMeiZhiYing/Meshes/SK_SSR_XianMeiZhiYing_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_YanDaoKe/Meshes/SK_SSR_YanDaoKe_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_YongHengHuHuan/Meshes/SK_SSR_YongHengHuHuan_Showcase_Skin",
+    "/Game/Art/Characters/Pet_Showcase/SSR_ZangAiMiQing/Meshes/SK_SSR_ZangAiMiQing_Showase_Skin",
+    "/Game/Art/Characters/NPC/ShiKongLangKe/Meshes/SK_ShiKongLangKe_Skin",
+    "/Game/Art/Characters/NPC/YiErSha/Meshes/SK_YiErSha_NPC_Skin",
+    "/Game/Art/Characters/Monster/Boss/YiErSha/Meshes/SK_YiErSha_Skin",
+    "/Game/Art/Characters/Monster/Boss/YiJiNvWang/Meshes/SK_YiJiNvWang_Skin",
+    "/Game/Art/Characters/Monster/Boss/YiJieDian/Meshes/SK_YiJieDian_02_Skin_2",
+    "/Game/Art/Characters/Hero_Showcase/ZhiHuiGuan/Meshes/SK_ZhiHuiGuan2_Showcase_Skin",
+    "/Game/Art/Characters/Hero_Showcase/ZhiHuiGuan/Meshes/SK_ZhiHuiGuan_Showcase_Skin",
+    "/Game/Art/Characters/Hero/ZhiHuiGuan/Meshes/SK_ZhiHuiGuan_Skin",
+    "/Game/Art/Characters/Monster/Boss/ShiXinWang/Meshes/SK_ShiXinWang_Skin",
+    # ← 你肉眼挑出的破洞角色（共 96 个）；要加/删直接改这里
+]
+# 小测试集：先抽几张验证 matte 生效 + 调参（4 真破洞 + 2 合法镂空对照）
+_TLI_HOLE_TEST = [
+    "/Game/Art/Characters/Hero_Showcase/BingHuoRen/Meshes/SK_BingHuoRen2_Showcase_Skin",            # 真破洞-冰火人裙摆
+    "/Game/Art/Fashion/Heros/Hero_Showcase/C_YeManRen_001/Meshes/SK_C_YeManRen_001_Showcase_Skin",  # 真破洞-野蛮人
+    "/Game/Art/Characters/Pet_Showcase/SSR_EYuShiTu/Meshes/SK_SSR_EYuShiTu_Showcase_Skin",          # 真破洞-鳄鱼食徒(宠物)
+    "/Game/Art/Characters/Monster/Boss/ChuanSuoZhe/Meshes/SK_ChuanSuoZhe_Skin",                     # 真破洞-穿梭者(Boss)
+    "/Game/Art/Characters/Token/FaShuJiuChan/Meshes/SK_FaShuJiuChan_Skin",                          # 对照-陀螺镂空(应保留透明)
+    "/Game/Art/Characters/Monster/YiJiKuangFeng_Elite/Meshes/SK_YiJiKuangFeng_02_Skin",             # 对照-翅膀(应保留透明)
+]
+WHITELIST_MESH_PATHS = []   # 全量（破洞修复时改成 _TLI_HOLE_FIX）
 
 # alpha 诊断期：关掉背景板，背景渲透明（clear_color=0），保留各路原始 RGBA 看 matte
 USE_BG_PLANE = False
 
 VIEWS = [("front", 180.0), ("side", -90.0), ("back", 0.0), ("tq", 135.0)]
-FILL_RATIO = 0.80
+FILL_RATIO = 0.92      # 竖直占帧（方形画幅下与水平对称）：把长边尽量塞满，原 0.80
 SKIP_EXISTING = True   # 全量续传（中途 crash 重跑自动跳过已完成的 mesh）
-KEEP_TMP = False       # 全量：合成后删除 base/final 临时分图
+KEEP_TMP = False       # 合成后删除 base/final/matte 临时分图
 # alpha 提纯双阈值：coverage<=LOW 透明、>=HIGH 拉满实心、中间窄羽化。
 # 实测：背景 cov 几乎都 <=2，半透纱裙/白裤 cov 中位 6-8、最低 ~3 → LOW=2/HIGH=4 既让半透材质实心又不脏背景。
 ALPHA_LOW = 2.0
@@ -362,13 +483,16 @@ def eject_pilot(sub):
             pass
 
 
-FILL_RATIO_W = 0.62  # 水平占帧比例（< 竖直，左右多留 padding，防手臂/冰晶贴边）
+FILL_RATIO_W = 0.92  # 水平占帧比例（方形画幅下与竖直对称，宽体/翅膀才不会被拉远）
 
 
 def fit_camera(cam, actor):
     origin, extent = actor.get_actor_bounds(only_colliding_components=False)
     height = max(extent.z * 2, 50.0)
-    width = max(extent.x, extent.y) * 2
+    # 相机距离对 4 视角固定，只绕 yaw 转角色。某 yaw（尤其 tq=135°）下水平投影半宽最大
+    # 可达 sqrt(ex²+ey²)（包围盒对角线方向正对相机），用 max(ex,ey) 会低估 → tq 视角裁手。
+    # 取对角线作水平尺寸，保证任意 yaw 都不横向出框。
+    width = 2.0 * math.sqrt(extent.x * extent.x + extent.y * extent.y)
     sensor_h = 13.365
     focal = cam.get_cine_camera_component().current_focal_length
     v_fov = 2.0 * math.atan(sensor_h / (2.0 * focal))
@@ -568,6 +692,46 @@ def cleanup_capture():
     _BG_STATE["plane"] = None
 
 
+_MATTE_STATE = {"mat": None}
+
+
+def get_matte_material():
+    """纯白 base color 材质（默认着色，走已验证可靠的 base color 路截剪影）。"""
+    if _MATTE_STATE["mat"] is not None:
+        return _MATTE_STATE["mat"]
+    aal = unreal.EditorAssetLibrary
+    path = "/Game/_CharRef/M_CharRefMatte"
+    if aal.does_asset_exist(path):
+        _MATTE_STATE["mat"] = aal.load_asset(path)
+        return _MATTE_STATE["mat"]
+    try:
+        mat = unreal.AssetToolsHelpers.get_asset_tools().create_asset(
+            "M_CharRefMatte", "/Game/_CharRef", unreal.Material, unreal.MaterialFactoryNew())
+        node = unreal.MaterialEditingLibrary.create_material_expression(
+            mat, unreal.MaterialExpressionConstant3Vector)
+        node.set_editor_property("constant", unreal.LinearColor(1.0, 1.0, 1.0, 1.0))
+        unreal.MaterialEditingLibrary.connect_material_property(
+            node, "", unreal.MaterialProperty.MP_BASE_COLOR)
+        unreal.MaterialEditingLibrary.recompile_material(mat)
+        aal.save_asset(path)
+        log("matte material created (white base color)")
+        _MATTE_STATE["mat"] = mat
+        return mat
+    except Exception as e:
+        log(f"make matte material failed: {e}")
+        return None
+
+
+def get_skel_comp(actor):
+    c = getattr(actor, "skeletal_mesh_component", None)
+    if c is not None:
+        return c
+    try:
+        return actor.get_component_by_class(unreal.SkeletalMeshComponent)
+    except Exception:
+        return None
+
+
 def shoot_one(mesh_path, mesh_name):
     """渲染一个角色的 4 视角。输出目录镜像 UE 路径。返回 (status, label, failed_views)"""
     mesh_dir = mesh_to_output_dir(mesh_path)
@@ -675,6 +839,50 @@ def shoot_one(mesh_path, mesh_name):
                 groups[i][1].append(os.path.join(mesh_dir, tmp_name))
             except Exception as e:
                 failed_views.append(f"{view}/{src_tag}:{e}")
+        # ===== matte 几何剪影 pass：整体涂白单独截剪影，combine 时当 alpha =====
+    if USE_MATTE_ALPHA:
+        matte_mat = get_matte_material()
+        skel = get_skel_comp(actor)
+        if matte_mat is None or skel is None:
+            failed_views.append("matte:no_material_or_component")
+        else:
+            num = skel.get_num_materials()
+            orig_mats = [skel.get_material(mi) for mi in range(num)]
+            log(f"  matte: num_materials={num} mat={matte_mat.get_name()}")
+            try:
+                for mi in range(num):
+                    skel.set_material(mi, matte_mat)
+                comp.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_BASE_COLOR)
+                if bg_plane is not None:  # matte 背景必须黑，藏背景板
+                    try:
+                        bg_plane.set_actor_hidden_in_game(True)
+                        bg_plane.set_is_temporarily_hidden_in_editor(True)
+                    except Exception:
+                        pass
+                # 材质切换后预热几帧，避免首帧还是旧材质
+                actor.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=0.0, yaw=VIEWS[0][1]), False)
+                for _ in range(WARMUP_CAPTURES):
+                    comp.capture_scene()
+                for i, (view, yaw) in enumerate(VIEWS):
+                    try:
+                        actor.set_actor_rotation(unreal.Rotator(roll=0.0, pitch=0.0, yaw=yaw), False)
+                        new_origin, _ = actor.get_actor_bounds(only_colliding_components=False)
+                        sc_loc = unreal.Vector(new_origin.x - cam_dist, new_origin.y, new_origin.z)
+                        sc_actor.set_actor_location(sc_loc, False, False)
+                        sc_actor.set_actor_rotation(
+                            unreal.MathLibrary.find_look_at_rotation(sc_loc, new_origin), False)
+                        tmp_name = f"v{i}_{view}__matte.png"
+                        comp.capture_scene()
+                        export_rt(_SC_STATE["rl"], w, rt, mesh_dir, tmp_name)
+                        groups[i][1].append(os.path.join(mesh_dir, tmp_name))
+                    except Exception as e:
+                        failed_views.append(f"{view}/matte:{e}")
+            finally:
+                for mi in range(num):
+                    try:
+                        skel.set_material(mi, orig_mats[mi])
+                    except Exception:
+                        pass
     eas.destroy_actor(actor)
     # 释放 mesh 资源，避免批量时内存累积把 UE 撑挂
     try:
@@ -699,39 +907,47 @@ def combine_max(groups):
     if not pairs or not os.path.exists(EXTERNAL_PYTHON):
         return
     spec = json.dumps({"pairs": pairs, "keep_tmp": bool(KEEP_TMP),
-                       "low": float(ALPHA_LOW), "high": float(ALPHA_HIGH)}, ensure_ascii=False)
+                       "low": float(ALPHA_LOW), "high": float(ALPHA_HIGH),
+                       "use_matte": bool(USE_MATTE_ALPHA)}, ensure_ascii=False)
     script = (
         "import sys, json, os\n"
         "from PIL import Image\n"
         "import numpy as np\n"
         "d = json.loads(sys.stdin.read())\n"
-        "low = d['low']; high = d['high']; keep = d['keep_tmp']\n"
+        "low = d['low']; high = d['high']; keep = d['keep_tmp']; use_matte = d['use_matte']\n"
         "for out, tmps in d['pairs']:\n"
-        "    base = final = None\n"
+        "    base = final = matte = None\n"
         "    for t in tmps:\n"
         "        if not os.path.exists(t):\n"
         "            continue\n"
         "        arr = np.asarray(Image.open(t).convert('RGBA')).astype(np.float32)\n"
         "        if t.endswith('__base.png'):\n"
         "            base = arr\n"
+        "        elif t.endswith('__matte.png'):\n"
+        "            matte = arr\n"
         "        else:\n"
         "            final = arr\n"
         "    if base is None and final is None:\n"
         "        continue\n"
         "    rgbs = [x[:, :, :3] for x in (base, final) if x is not None]\n"
         "    rgb = rgbs[0] if len(rgbs) == 1 else np.maximum(rgbs[0], rgbs[1])\n"
-        "    # alpha = final 覆盖(含 translucent 纱裙) ∪ base 几何(opaque 实体)。\n"
-        "    # final 路某些视角对下半身/opaque 渲染缺失，但 base color 完整渲了 opaque，取并集补回。\n"
-        "    if final is not None:\n"
-        "        cov = 255.0 - final[:, :, 3]\n"
-        "        af = np.clip((cov - low) / (high - low), 0.0, 1.0)\n"
+        "    if use_matte and matte is not None:\n"
+        "        # alpha 取自 matte 剪影亮度（白=有网格=实心）。按几何不看颜色 → 深色处不破洞、\n"
+        "        # 合法镂空(无网格=黑)仍透明。低/高阈去黑底噪点+拉满，边缘窄羽化保留抗锯齿。\n"
+        "        m = matte[:, :, :3].max(2)\n"
+        "        a = np.clip((m - 40.0) / (200.0 - 40.0), 0.0, 1.0) * 255.0\n"
         "    else:\n"
-        "        af = np.ones(rgb.shape[:2], np.float32)\n"
-        "    if base is not None:\n"
-        "        bgeo = np.clip((base[:, :, :3].max(2) - low) / (high - low), 0.0, 1.0)\n"
-        "    else:\n"
-        "        bgeo = np.zeros(rgb.shape[:2], np.float32)\n"
-        "    a = np.maximum(af, bgeo) * 255.0\n"
+        "        # 旧法：alpha = final 覆盖(含 translucent 纱裙) ∪ base 几何(opaque 实体)。\n"
+        "        if final is not None:\n"
+        "            cov = 255.0 - final[:, :, 3]\n"
+        "            af = np.clip((cov - low) / (high - low), 0.0, 1.0)\n"
+        "        else:\n"
+        "            af = np.ones(rgb.shape[:2], np.float32)\n"
+        "        if base is not None:\n"
+        "            bgeo = np.clip((base[:, :, :3].max(2) - low) / (high - low), 0.0, 1.0)\n"
+        "        else:\n"
+        "            bgeo = np.zeros(rgb.shape[:2], np.float32)\n"
+        "        a = np.maximum(af, bgeo) * 255.0\n"
         "    outarr = np.dstack([rgb, a]).astype(np.uint8)\n"
         "    Image.fromarray(outarr, 'RGBA').save(out, optimize=True)\n"
         "    if not keep:\n"

@@ -131,7 +131,7 @@ main { padding: 14px; }
                   margin-bottom: 4px; word-break: break-all; }
 .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .thumb { position: relative; background: repeating-conic-gradient(#1d1d1d 0% 25%, #252525 0% 50%) 50% / 16px 16px;
-         border-radius: 4px; overflow: hidden; aspect-ratio: 1024/2304; cursor: zoom-in; }
+         border-radius: 4px; overflow: hidden; aspect-ratio: 1/1; cursor: zoom-in; }
 .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .thumb .label { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.6);
                 color: #ccc; padding: 1px 6px; border-radius: 3px; font-size: 10px; }
